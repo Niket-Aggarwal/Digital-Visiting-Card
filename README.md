@@ -1,1 +1,1 @@
-# Digital-Visiting-Card
+# NexLink — Next Generation Digital Identity

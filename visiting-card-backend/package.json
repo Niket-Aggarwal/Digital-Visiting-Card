@@ -1,0 +1,19 @@
+{
+  "name": "visiting-card-backend",
+  "version": "1.0.0",
+  "description": "A one stop social connection platform",
+  "license": "ISC",
+  "author": "Niket",
+  "type": "commonjs",
+  "main": "Server.js",
+  "scripts": {
+    "start": "node Server.js",
+    "dev":"nodemon Server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}
