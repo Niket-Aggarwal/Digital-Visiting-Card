@@ -137,14 +137,14 @@ exports.Verify = async (req, res) => {
                     message: "Unable to send verification email."
                 });
             }
-            await verifyModel.create(
+            await verifyModel.findOneAndUpdate({ email },
                 {
                     name,
-                    email,
-                    password: hashedPassword,
+                    password:hashedPassword,
                     otp,
                     otpExpiry
-                }
+                },
+                {upsert: true}
             );
             return res.status(200).json({
                 success: true,
@@ -202,7 +202,6 @@ exports.Register = async (req, res) => {
         const exist = await verifyModel.findOne({ email });
         if (new Date() > exist.otpExpiry || exist.otp !== otp) {
             const verifyier = { name: exist.name, email: exist.email }
-            await verifyModel.deleteOne({ email });
             return res.status(400).json({
                 success: false,
                 message: "OTP has expired. Please request a new OTP.",
