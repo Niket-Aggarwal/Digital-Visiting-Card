@@ -112,8 +112,8 @@ exports.Verify = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         EmailCheck(email)
-        Passcreate(password)
         if (name) {
+            Passcreate(password)
             Namecheck(name)
             const exist = await authModel.findOne({ email }).select("-password");
             if (exist) {
