@@ -8,6 +8,7 @@ const verificationSchema = new mongoose.Schema(
         otp: { type: String },
         otpExpiry: { type: Date }
     },
-    { timestamps: true });
+    { timestamps: true }
+);
 
 module.exports = mongoose.model("Verify", verificationSchema);

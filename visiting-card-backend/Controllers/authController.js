@@ -1,9 +1,10 @@
-const authModel = require("../Models/authModel")
-const verifyModel = require("../Models/verifyModel")
 const { OAuth2Client } = require("google-auth-library")
 const jwt = require("jsonwebtoken")
-const { EmailCheck, Namecheck, Passcheck, Passcreate, SecuringPassword } = require("../Utility/Customwork")
-const { sendVerificationOTP, loginSuccessMail } = require("../Utility/Mails")
+const authModel = require("../Models/authModel")
+const verifyModel = require("../Models/verifyModel")
+const { EmailCheck, Namecheck, Passcheck, Passcreate, Passvalidate } = require("../Utility/Customwork")
+const { OtpVerificationMail } = require("../Utility/OtpVerificationMail")
+const { loginSuccessMail } = require("../Utility/loginSuccessMail")
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -14,6 +15,7 @@ exports.Base = async (req, res) => {
         message: "This is Auth Base Url"
     });
 }
+
 
 exports.GoogleLogin = async (req, res) => {
     try {
@@ -60,6 +62,7 @@ exports.GoogleLogin = async (req, res) => {
         })
     }
 };
+
 
 exports.ActiveSession = async (req, res) => {
     try {
@@ -108,12 +111,13 @@ exports.ActiveSession = async (req, res) => {
     }
 };
 
+
 exports.Verify = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         EmailCheck(email)
         if (name) {
-            Passcreate(password)
+            Passcheck(password)
             Namecheck(name)
             const exist = await authModel.findOne({ email }).select("-password");
             if (exist) {
@@ -129,8 +133,8 @@ exports.Verify = async (req, res) => {
                     message: "Email already registered."
                 });
             }
-            const hashedPassword = await SecuringPassword(password);
-            const { sent, otp, otpExpiry } = await sendVerificationOTP(email, name);
+            const hashedPassword = await Passcreate(password);
+            const { sent, otp, otpExpiry } = await OtpVerificationMail(email, name);
             if (!sent) {
                 return res.status(500).json({
                     success: false,
@@ -140,11 +144,11 @@ exports.Verify = async (req, res) => {
             await verifyModel.findOneAndUpdate({ email },
                 {
                     name,
-                    password:hashedPassword,
+                    password: hashedPassword,
                     otp,
                     otpExpiry
                 },
-                {upsert: true}
+                { upsert: true }
             );
             return res.status(200).json({
                 success: true,
@@ -152,7 +156,6 @@ exports.Verify = async (req, res) => {
                 message: "OTP sent successfully.",
                 email
             });
-
         }
         const exist = await authModel.findOne({ email });
         if (!exist) {
@@ -167,7 +170,7 @@ exports.Verify = async (req, res) => {
                 message: "This account was registered using Google. Please continue with Google Authentication."
             });
         }
-        await Passcheck(password, exist.password);
+        await Passvalidate(password, exist.password);
         const token = jwt.sign({ id: exist._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
         await loginSuccessMail(exist.email, exist.name)
         return res.status(200).json({
@@ -196,6 +199,7 @@ exports.Verify = async (req, res) => {
     }
 };
 
+
 exports.Register = async (req, res) => {
     try {
         const { email, otp } = req.body
@@ -204,7 +208,7 @@ exports.Register = async (req, res) => {
             const verifyier = { name: exist.name, email: exist.email }
             return res.status(400).json({
                 success: false,
-                message: "OTP has expired. Please request a new OTP.",
+                message: "OTP Error Ask Again",
                 verifyier
             });
         }
@@ -216,7 +220,7 @@ exports.Register = async (req, res) => {
         })
         await verifyModel.deleteOne({ email });
         const token = jwt.sign({ id: add._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
-        await loginSuccessMail(exist.email, exist.name)
+        await loginSuccessMail(add.email, add.name)
         return res.status(200).send({
             success: true,
             user: {

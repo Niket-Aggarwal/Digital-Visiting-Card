@@ -3,7 +3,7 @@ const transporter = require("../Config/NodemailConnection");
 const sendEmail = async ({ to, subject, html }) => {
     try {
         await transporter.sendMail({
-            from: `"NexLink <noreply@nexlink.com>" <${process.env.EMAIL_USER}>`,
+            from: `"NexLink <noreply@nexlink.com>"<${process.env.EMAIL_USER}>`,
             to,
             subject,
             html

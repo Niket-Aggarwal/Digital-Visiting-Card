@@ -17,7 +17,7 @@ const EmailCheck = (email) => {
     }
 }
 
-const Passcreate = (password) => {
+const Passcheck = (password) => {
     if (!validator.isStrongPassword(password)) {
         const err = new Error("Create a stronger password.");
         err.name = "ValidateError";
@@ -25,12 +25,12 @@ const Passcreate = (password) => {
     }
 }
 
-const SecuringPassword = async (password) => {
+const Passcreate = async (password) => {
     const salt = await bcrypt.genSalt(10);
     return await bcrypt.hash(password, salt);
 };
 
-const Passcheck = async (password, hashedPassword) => {
+const Passvalidate = async (password, hashedPassword) => {
     const ispassMatch = await bcrypt.compare(password, hashedPassword);
     if (!ispassMatch) {
         const err = new Error("Password Incorrect")
@@ -39,4 +39,4 @@ const Passcheck = async (password, hashedPassword) => {
     }
 };
 
-module.exports = { Namecheck, EmailCheck, Passcreate, SecuringPassword, Passcheck };
+module.exports = { Namecheck, EmailCheck, Passcreate, Passvalidate, Passcheck };
