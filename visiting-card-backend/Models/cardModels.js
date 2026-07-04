@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const cardSchema = new mongoose.Schema(
     {
+        authId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Auth",
+            required: true,
+            unique: true
+        },
         name: { type: String, required: true },
         headline: { type: String, required: true },
         bio: { type: String, required: true },

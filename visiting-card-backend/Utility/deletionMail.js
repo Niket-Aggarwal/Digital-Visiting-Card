@@ -1,10 +1,10 @@
-const sendEmail = require("./SendMail");
+const sendEmail = require("./SendMail")
 
-const loginSuccessMail = async (email, name) => {
+const accountDeletedMail = async (email, name) => {
 
     await sendEmail({
         to: email,
-        subject: "Successful Login • NexLink",
+        subject: "Your NexLink Account Has Been Deleted",
         html: `
         <div style="
             max-width:600px;
@@ -13,6 +13,7 @@ const loginSuccessMail = async (email, name) => {
             background:#ffffff;
             padding:30px;
             border-radius:10px">
+
             <div style="text-align:center">
                 <img
                     src="${process.env.MAIL_IMG}"
@@ -20,41 +21,57 @@ const loginSuccessMail = async (email, name) => {
                     width="180"
                     style="display:block; margin:auto;"
                 />
+
                 <h1 style="color:#2563eb;">
                     NexLink — Next Generation Digital Identity
                 </h1>
             </div>
+
             <hr>
+
             <h2>Hello ${name} 👋</h2>
+
             <p>
-                Your NexLink account has been
-                <strong>successfully signed in.</strong>
+                This email confirms that your
+                <strong>NexLink account has been permanently deleted.</strong>
             </p>
+
             <div style="
                 margin:25px 0;
                 padding:18px;
                 background:#f5f7ff;
                 border-left:5px solid #2563eb;
                 border-radius:6px;">
+
                 <strong>Account:</strong> ${email}<br>
-                <strong>Time:</strong> ${new Date().toLocaleString()}
+                <strong>Deleted On:</strong> ${new Date().toLocaleString()}
             </div>
+
             <p>
-                If this login was made by you, no further action is required.
+                All associated authentication data has been removed from our system.
             </p>
+
+            <p>
+                If you deleted your account intentionally, no further action is required.
+            </p>
+
             <p style="color:#d32f2f;">
-                If you did <strong>not</strong> sign in, please check it once.
+                If you did <strong>not</strong> request this deletion, please contact our support team immediately.
             </p>
+
             <br>
+
             <p style="color:gray;font-size:13px;">
-                Thank you for choosing NexLink.
+                Thank you for being a part of NexLink.
             </p>
+
             <p style="color:gray;font-size:13px;">
                 © NexLink • One Identity. Infinite Connections.
             </p>
+
         </div>
         `
     });
 };
 
-module.exports = { loginSuccessMail };
+module.exports = { accountDeletedMail };

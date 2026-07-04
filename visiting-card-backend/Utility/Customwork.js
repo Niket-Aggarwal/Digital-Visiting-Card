@@ -1,5 +1,7 @@
 const validator = require("validator");
+const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt");
+const { IncorrectPasswordMail } = require("./IncorrectPass")
 
 const Namecheck = (name) => {
     if (!validator.isAlpha(name.replace(/\s/g, ""))) {
@@ -30,13 +32,48 @@ const Passcreate = async (password) => {
     return await bcrypt.hash(password, salt);
 };
 
-const Passvalidate = async (password, hashedPassword) => {
+const Passvalidate = async (password, hashedPassword, name, email) => {
     const ispassMatch = await bcrypt.compare(password, hashedPassword);
     if (!ispassMatch) {
+        IncorrectPasswordMail(email, name)
         const err = new Error("Password Incorrect")
         err.name = "ValidateError";
         throw err;
     }
 };
 
-module.exports = { Namecheck, EmailCheck, Passcreate, Passvalidate, Passcheck };
+const tokencheck = (authHeader) => {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return {
+            success: false,
+            message: "Token Missing"
+        }
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return { success: true, decoded }
+}
+
+const tokenerr = (err, part) => {
+    if (err.name === "TokenExpiredError") {
+        return {
+            success: false,
+            status: 400
+        }
+    }
+    if (err.name === "JsonWebTokenError") {
+        return {
+            success: false,
+            message: "Invalid Token",
+            status: 401
+        }
+    }
+    console.error(part, err)
+    return {
+        success: false,
+        message: "Something went wrong.",
+        status: 500
+    }
+}
+
+module.exports = { Namecheck, EmailCheck, Passcreate, Passvalidate, Passcheck, tokencheck, tokenerr };

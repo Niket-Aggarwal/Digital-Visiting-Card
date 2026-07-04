@@ -1,7 +1,20 @@
-# 🚀NexLink-Backend
-> Backend API for **NexLink - Next Generation Digital Identity Platform**
+# 🚀 NexLink Backend
+> Backend for **NexLink — Next Generation Digital Identity Platform**
 
-NexLink allows users to create a professional digital identity card that can be shared with a single public URL.
+NexLink enables users to create a professional digital identity card that can be shared with a single public URL. It provides secure authentication, profile management, email verification, and Google Sign-In.
+
+# 🚀 Features
+- Custom Authentication
+- Google Authentication
+- JWT Session Management
+- OTP Verification
+- Password Reset
+- Account Deletion
+- Digital Identity Card
+- Cloudinary Image Upload
+- Public Portfolio via Slug
+- Email Notifications
+- Secure Password Hashing
 
 # 📌 Tech Stack
 - Node.js
@@ -10,15 +23,16 @@ NexLink allows users to create a professional digital identity card that can be 
 - Mongoose
 - JWT Authentication
 - bcrypt
-- Cloudinary
-- Multer - image handling
-- Nodemailer (OTP Verification)
+- Nodemailer
 - Google OAuth
+- Cloudinary
+- Multer
+- Validator.js
 
 # 🗄 Database Collections
 
 ## 1. Authentication Collection
-Stores login-related information.
+Stores authentication-related information.
 
 ```javascript
 {
@@ -27,16 +41,29 @@ Stores login-related information.
     password,
     authProvider,
     googleId,
-    picture,
-    isEmailVerified,
+    picture
 }
 ```
 
-## 2. Profile Collection
-Stores the public digital visiting card.
+## 2. Verification Collection
+Temporary collection used during signup and password reset.
 
 ```javascript
 {
+    name,
+    email,
+    password,
+    otp,
+    otpExpiry
+}
+```
+
+## 3. Card Collection
+Stores the user's public digital identity.
+
+```javascript
+{
+    authId,
     name,
     headline,
     bio,
@@ -48,9 +75,7 @@ Stores the public digital visiting card.
     instagram,
     facebook,
     telegram,
-    others:[
-        {platform,link}
-    ],
+    others: [ { platform, link } ],
     theme,
     layout,
     slug,
@@ -59,213 +84,230 @@ Stores the public digital visiting card.
 }
 ```
 
-# 🔐 Authentication System
+# 🔐 Authentication
 NexLink supports two authentication methods.
 
 ## Custom Authentication
-- Register
-- Login
-- JWT Authentication
-- bcrypt Password Hashing
+- Email Registration
 - Email OTP Verification
+- Secure Login
+- JWT Authentication
+- Password Hashing (bcrypt)
 
 ## Google Authentication
 - Continue with Google
 - Google OAuth
-- No Password Required
+- Automatic Account Creation
+- JWT Authentication
 
 # 🔄 Authentication Flow
 
 ## Custom User
 ```
-Register
-↓
+Signup
+   ↓
+Validate Details
+   ↓
 Generate OTP
-↓
-Send Email
-↓
+   ↓
+Send Verification Email
+   ↓
 Verify OTP
-↓
-Account Created
-↓
-JWT Generated
-↓
+   ↓
+Create Account
+   ↓
+Generate JWT
+   ↓
 Dashboard
 ```
 
 ## Google User
 ```
 Continue with Google
-↓
+        ↓
 Google Verification
-↓
-JWT Generated
-↓
+        ↓
+Generate JWT
+        ↓
 Dashboard
 ```
 
+## Reset Password
+```
+Enter Email
+      ↓
+Generate OTP
+      ↓
+Send Email
+      ↓
+Verify OTP
+      ↓
+New Password
+      ↓
+Update Password
+```
+
 # 📡 API Endpoints
+## 🔐 Authentication APIs
 
-Base URL
+### Google Login
+Authenticate using Google OAuth.
+
 ```
-http://localhost:5000/
-```
-
-# 🔐 Authentication APIs
-
-## Register
-Creates a new user.
-
-POST
-```
-/auth/register
+POST /auth/google
 ```
 
-## Verify OTP
-Verifies email.
+### Verify
 
-POST
-```
-/auth/verify-otp
-```
+Handles:
+- Custom Signup Verification
+- Custom Login Verification
 
-## Google Login
-Authenticates Google user.
-
-POST
 ```
-/auth/google
+POST /auth/verify
 ```
 
-## Logged-in User
-Returns logged-in user details using JWT in Local Storage.
+### Register
+Creates account after successful OTP verification.
 
-POST
 ```
-/auth/me
-```
-
-## Delete Account
-Deletes authenticated account.
-
-DELETE
-```
-/auth/delete
+POST /auth/register
 ```
 
-# 👤 Profile APIs
+### Active Session
+Returns authenticated user details using JWT.
 
-## Create Profile
-Creates Digital Visiting Card.
-
-POST
 ```
-/profile/create
+GET /auth/me
+```
+
+### Forgot Password
+Sends OTP for password reset.
+
+```
+POST /auth/forget
+```
+
+### Verify Reset OTP
+Verifies OTP before allowing password update.
+
+```
+POST /auth/otpverify
+```
+
+### Reset Password
+Updates account password.
+
+```
+PUT /auth/passupdate
+```
+
+### Delete Account
+Deletes authentication record and linked profile.
+
+```
+DELETE /auth/delete
+```
+
+## 👤 Profile APIs
+
+### Create Profile
+Creates user's digital identity card.
+
+```
+POST /profile/create
 ```
 
 ## Update Profile
-Update anything like does it Change visibility
+Updates profile information.
 
-PUT
 ```
-/profile/update/:id
+PUT /profile/update
 ```
 
 ## Delete Profile
-Delete the Identity Card
+Deletes digital identity card.
 
-DELETE
 ```
-/profile/delete/:id
-```
-
-# ☁ Upload APIs
-
-## Upload Image
-Uploads profile image to Cloudinary.
-
-POST
-```
-/profile/upload
+DELETE /profile/delete
 ```
 
-Returns
+## Public Profile
+Returns public profile using unique slug.
+
 ```
+GET /profile/:slug
+```
+
+# ☁ Image Upload
+Profile images are uploaded to Cloudinary.
+
+```
+Frontend
+      ↓
+Backend
+      ↓
+Cloudinary
+      ↓
 Image URL
+      ↓
+MongoDB
 ```
 
-# ⭐ Premium APIs
-(Currently Placeholder)
+Only the Cloudinary URL is stored in the database.
 
-GET
-```
-/premium
-```
+# 📧 Email System
+The backend automatically sends emails for:
+- Email Verification OTP
+- Incorrect Password Alert
+- Successful Login
+- Password Updated
+- Account Deleted
 
-Returns
-```
-Coming Soon
-```
+# 🔒 Security Features
+- JWT Authentication
+- Protected Routes
+- Google OAuth Verification
+- Email OTP Verification
+- bcrypt Password Hashing
+- Input Validation
+- Slug-based Public Profiles
+- One Account → One Card Relationship
 
-# 🎨 Supported Themes
+# 🎨 Themes
 - Light
 - Dark
 
-# 🎨 Planned Layouts
-- Minimal
+# 📐 Layouts
 - Modern
-- Bold
+- Minimal
+- Bold 
 
-# 🔗 Public URL Format
+# ⭐ User Types
+- Free
+- Premium *(Coming Soon)*
+
+# 🌐 Public URL
 
 ```
 /profile/:slug
 ```
 
-# 🖼 Image Storage
-Profile images are **not stored in MongoDB**.
-
-Workflow
-```
-Frontend
-↓
-Backend
-↓
-Cloudinary
-↓
-Image URL
-↓
-MongoDB
-```
-
-Only the Cloudinary URL is stored.
-
-# 📧 Email System
-Emails are sent from backend.
-
-Used for
-- OTP Verification
-- Welcome Email
-
-# 🔒 Security Features
-- JWT Authentication
-- bcrypt Password Hashing
-- Protected Routes
-- Email Verification
-- Google OAuth
-- Input Validation
-- Slug-based Public URLs
-
 # 📦 Environment Variables
-
-```
+```env
 PORT=
+
 MONGODB_URI=
+
 JWT_SECRET=
+
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+
 EMAIL_USER=
 EMAIL_PASS=
+MAIL_IMG=
+
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
@@ -273,4 +315,6 @@ CLOUDINARY_API_SECRET=
 
 # 👨‍💻 Developer
 **Niket**
-Full Stack Developer | MERN Stack Enthusiast
+Full Stack MERN Developer
+
+> **NexLink — One Identity. Infinite Connections.**

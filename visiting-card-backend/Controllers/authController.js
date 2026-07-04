@@ -2,9 +2,12 @@ const { OAuth2Client } = require("google-auth-library")
 const jwt = require("jsonwebtoken")
 const authModel = require("../Models/authModel")
 const verifyModel = require("../Models/verifyModel")
-const { EmailCheck, Namecheck, Passcheck, Passcreate, Passvalidate } = require("../Utility/Customwork")
+const cardModel = require("../Models/cardModels")
+const { EmailCheck, Namecheck, Passcheck, Passcreate, Passvalidate, tokencheck, tokenerr } = require("../Utility/Customwork")
 const { OtpVerificationMail } = require("../Utility/OtpVerificationMail")
 const { loginSuccessMail } = require("../Utility/loginSuccessMail")
+const { passwordUpdatedMail } = require("../Utility/passupdatemail")
+const { accountDeletedMail } = require("../Utility/deletionMail")
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -66,16 +69,11 @@ exports.GoogleLogin = async (req, res) => {
 
 exports.ActiveSession = async (req, res) => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({
-                success: false,
-                message: "Token Missing"
-            });
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
         }
-        const token = authHeader.split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const exist = await authModel.findById(decoded.id).select("-password");
+        const exist = await authModel.findById(result.decoded.id).select("-password");
         if (!exist) {
             return res.status(401).json({
                 success: false,
@@ -92,22 +90,11 @@ exports.ActiveSession = async (req, res) => {
             }
         });
     } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            return res.status(401).send({
-                success: false,
-            });
-        }
-        if (err.name === "JsonWebTokenError") {
-            return res.status(401).send({
-                success: false,
-                message: "Invalid Token"
-            });
-        }
-        console.error("Activesession:", err)
-        return res.status(500).send({
-            success: false,
-            message: "Something went wrong."
-        });
+        const result = tokenerr(err, "Activesession Error:")
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        })
     }
 };
 
@@ -170,7 +157,7 @@ exports.Verify = async (req, res) => {
                 message: "This account was registered using Google. Please continue with Google Authentication."
             });
         }
-        await Passvalidate(password, exist.password);
+        await Passvalidate(password, exist.password, exist.name, exist.email);
         const token = jwt.sign({ id: exist._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
         await loginSuccessMail(exist.email, exist.name)
         return res.status(200).json({
@@ -239,3 +226,148 @@ exports.Register = async (req, res) => {
         });
     }
 }
+
+
+exports.ForgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body
+        EmailCheck(email)
+        const exist = await authModel.findOne({ email }).select("-password");
+        if (!exist) {
+            return res.status(404).send({
+                sucess: false,
+                message: "User with this email do not exist"
+            })
+        }
+        const { sent, otp, otpExpiry } = await OtpVerificationMail(exist.email, exist.name);
+        if (!sent) {
+            return res.status(500).json({
+                success: false,
+                message: "Unable to send verification email."
+            });
+        }
+        await verifyModel.findOneAndUpdate({ email: exist.email },
+            {
+                name: exist.name,
+                otp,
+                otpExpiry
+            },
+            { upsert: true }
+        );
+        return res.status(200).json({
+            success: true,
+            message: "OTP sent successfully.",
+            email
+        });
+    } catch (err) {
+        if (err.name === "ValidateError") {
+            return res.status(400).json({
+                success: false,
+                under: true,
+                message: err.message
+            });
+        }
+        console.error("Reset Check Error:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong."
+        });
+    }
+}
+
+
+exports.OtpVerfiy = async (req, res) => {
+    try {
+        const { email, otp } = req.body
+        const exist = await verifyModel.findOne({ email });
+        if (new Date() > exist.otpExpiry || exist.otp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: "OTP Error Ask Again",
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            email
+        })
+    } catch (err) {
+        console.error("OTP check Error", err);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong."
+        });
+    }
+}
+
+
+exports.PasswordReset = async (req, res) => {
+    try {
+        const { password, confirm, email } = req.body
+        const exist = await verifyModel.findOne({ email });
+        Passcheck(password)
+        if (!(password === confirm)) {
+            return res.status(400).json({
+                success: false,
+                message: "Password doesnot match",
+            });
+        }
+        const hashedPassword = await Passcreate(password);
+        const add = await authModel.findOneAndUpdate({ email: exist.email }, { password: hashedPassword })
+        await verifyModel.deleteOne({ email });
+        const token = jwt.sign({ id: add._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
+        await passwordUpdatedMail(add.email, add.name)
+        return res.status(200).send({
+            success: true,
+            user: {
+                id: add._id,
+                name: add.name,
+                email: add.email,
+                picture: add.picture
+            },
+            token
+        })
+    } catch (err) {
+        if (err.name === "ValidateError") {
+            return res.status(400).json({
+                success: false,
+                under: true,
+                message: err.message
+            });
+        }
+        console.error("Password Reset", err);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong."
+        });
+    }
+}
+
+
+exports.Delete = async (req, res) => {
+    try {
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
+        }
+        const exist = await authModel.findById(result.decoded.id);
+        if (!exist) {
+            return res.status(404).send({
+                success: false,
+                message: "User not found"
+            });
+        }
+        await cardModel.deleteOne({ authId: result.decoded.id });
+        await authModel.findByIdAndDelete(result.decoded.id);
+        await accountDeletedMail(exist.email, exist.name)
+        return res.status(200).send({
+            success: true,
+            message: "Account deleted successfully"
+        });
+    } catch (err) {
+        const result = tokenerr(err, "Deletion Error:");
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        });
+    }
+};
