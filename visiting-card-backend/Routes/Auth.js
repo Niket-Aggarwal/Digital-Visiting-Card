@@ -11,7 +11,7 @@ router.post("/verify", Verify)
 router.post("/register", Register)
 router.post("/forget", ForgetPassword)
 router.post("/otpverify", OtpVerfiy)
-router.put("/passupdate", PasswordReset)
+router.patch("/passupdate", PasswordReset)
 router.delete("/delete", Delete)
 
 module.exports = router

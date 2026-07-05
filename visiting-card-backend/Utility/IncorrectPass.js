@@ -4,7 +4,7 @@ const IncorrectPasswordMail = async (email, name) => {
 
     const time = new Date().toLocaleString();
 
-    const sent = await sendEmail({
+    await sendEmail({
         to: email,
         subject: "Security Alert - Incorrect Password Attempt",
         html: `

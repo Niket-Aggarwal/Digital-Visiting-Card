@@ -46,7 +46,7 @@ exports.GoogleLogin = async (req, res) => {
             })
         }
         const token = jwt.sign({ id: exist._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
-        await loginSuccessMail(exist.email, exist.name)
+        loginSuccessMail(exist.email, exist.name)
         return res.status(200).send({
             success: true,
             user: {
@@ -159,16 +159,16 @@ exports.Verify = async (req, res) => {
         }
         await Passvalidate(password, exist.password, exist.name, exist.email);
         const token = jwt.sign({ id: exist._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-        await loginSuccessMail(exist.email, exist.name)
+        loginSuccessMail(exist.email, exist.name)
         return res.status(200).json({
             success: true,
-            token,
             user: {
                 id: exist._id,
                 name: exist.name,
                 email: exist.email,
                 picture: exist.picture
-            }
+            },
+            token
         });
     } catch (err) {
         if (err.name === "ValidateError") {
@@ -207,7 +207,7 @@ exports.Register = async (req, res) => {
         })
         await verifyModel.deleteOne({ email });
         const token = jwt.sign({ id: add._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
-        await loginSuccessMail(add.email, add.name)
+        loginSuccessMail(add.email, add.name)
         return res.status(200).send({
             success: true,
             user: {
@@ -312,19 +312,12 @@ exports.PasswordReset = async (req, res) => {
             });
         }
         const hashedPassword = await Passcreate(password);
-        const add = await authModel.findOneAndUpdate({ email: exist.email }, { password: hashedPassword })
+        await authModel.findOneAndUpdate({ email: exist.email }, { password: hashedPassword })
         await verifyModel.deleteOne({ email });
-        const token = jwt.sign({ id: add._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
-        await passwordUpdatedMail(add.email, add.name)
+        passwordUpdatedMail(add.email, add.name)
         return res.status(200).send({
             success: true,
-            user: {
-                id: add._id,
-                name: add.name,
-                email: add.email,
-                picture: add.picture
-            },
-            token
+            message: "Password Updated Successfully"
         })
     } catch (err) {
         if (err.name === "ValidateError") {
@@ -358,7 +351,7 @@ exports.Delete = async (req, res) => {
         }
         await cardModel.deleteOne({ authId: result.decoded.id });
         await authModel.findByIdAndDelete(result.decoded.id);
-        await accountDeletedMail(exist.email, exist.name)
+        accountDeletedMail(exist.email, exist.name)
         return res.status(200).send({
             success: true,
             message: "Account deleted successfully"

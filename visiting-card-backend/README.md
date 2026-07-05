@@ -199,7 +199,7 @@ POST /auth/otpverify
 Updates account password.
 
 ```
-PUT /auth/passupdate
+PATCH /auth/passupdate
 ```
 
 ### Delete Account
@@ -211,32 +211,75 @@ DELETE /auth/delete
 
 ## 👤 Profile APIs
 
+### Dashboard
+The Dashboard page to show either to Create or not as one id support one card only
+
+```
+GET /profile/main
+```
+
 ### Create Profile
-Creates user's digital identity card.
+First Take: Basic Details
 
 ```
-POST /profile/create
+POST /profile/create/basic
 ```
 
-## Update Profile
-Updates profile information.
+Second Take: Phno and upload
 
 ```
-PUT /profile/update
+POST /profile/create/second
 ```
 
-## Delete Profile
+Third Take: all social links
+
+```
+POST /profile/create/third
+```
+
+Final Take: layout and other details
+
+```
+POST /profile/create/final
+```
+
+### Update Profile
+First Take: Basic Details
+
+```
+PATCH /profile/update/basic
+```
+
+Second Take: Phno and upload
+
+```
+PATCH /profile/update/second
+```
+
+Third Take: all social links
+
+```
+PATCH /profile/update/third
+```
+
+Final Take: layout and other details
+
+```
+PATCH /profile/update/final
+```
+
+### Delete Profile
 Deletes digital identity card.
 
 ```
 DELETE /profile/delete
 ```
 
-## Public Profile
+### Public Profile
 Returns public profile using unique slug.
 
 ```
-GET /profile/:slug
+POST /profile/show
 ```
 
 # ☁ Image Upload
@@ -256,7 +299,7 @@ MongoDB
 
 Only the Cloudinary URL is stored in the database.
 
-# 📧 Email System
+## 📧 Email System
 The backend automatically sends emails for:
 - Email Verification OTP
 - Incorrect Password Alert
@@ -264,7 +307,7 @@ The backend automatically sends emails for:
 - Password Updated
 - Account Deleted
 
-# 🔒 Security Features
+## 🔒 Security Features
 - JWT Authentication
 - Protected Routes
 - Google OAuth Verification
@@ -274,43 +317,23 @@ The backend automatically sends emails for:
 - Slug-based Public Profiles
 - One Account → One Card Relationship
 
-# 🎨 Themes
+## 🎨 Themes
 - Light
 - Dark
 
-# 📐 Layouts
+## 📐 Layouts
 - Modern
 - Minimal
 - Bold 
 
-# ⭐ User Types
+## ⭐ User Types
 - Free
 - Premium *(Coming Soon)*
 
-# 🌐 Public URL
+## 🌐 Public URL
 
 ```
 /profile/:slug
-```
-
-# 📦 Environment Variables
-```env
-PORT=
-
-MONGODB_URI=
-
-JWT_SECRET=
-
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-
-EMAIL_USER=
-EMAIL_PASS=
-MAIL_IMG=
-
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
 ```
 
 # 👨‍💻 Developer

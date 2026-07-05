@@ -4,6 +4,7 @@ const express = require("express")
 const cors = require("cors");
 const dbCollections = require("./Config/DatabaseConnection")
 const auth = require("./Routes/Auth")
+const dash = require("./Routes/Dashboard")
 
 
 const app = express()
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/auth", auth)
+app.use("/profile", dash)
 
 
 app.use((req, res) => {

@@ -12,8 +12,8 @@ const cardSchema = new mongoose.Schema(
         headline: { type: String, required: true },
         bio: { type: String, required: true },
         email: { type: String, required: true },
+        image: { type: String, default: null },
         phno: { type: String },
-        image: { type: String },
         github: { type: String },
         linkedin: { type: String },
         instagram: { type: String },
@@ -22,8 +22,8 @@ const cardSchema = new mongoose.Schema(
         others: [
             { platform: String, link: String }
         ],
-        theme: { type: String, default: "light" },
-        layout: { type: String, default: "modern" },
+        theme: { type: String },
+        layout: { type: String },
         slug: { type: String, unique: true, required: true },
         isPublic: { type: Boolean, default: true },
         userType: { type: String, default: "free" }
