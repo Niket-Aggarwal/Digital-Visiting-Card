@@ -7,11 +7,11 @@ const slugCreate = (slug) => {
 };
 
 const phnocheck = (phno) => {
-    if (!validator.isMobilePhone(phone, "en-IN")) {
+    if (!validator.isMobilePhone(phno, "en-IN")) {
         const err = new Error("Not a valid Phone Number");
         err.name = "ValidateError";
         throw err;
     }
 };
 
-module.exports = { slugCreate ,phnocheck};
+module.exports = { slugCreate, phnocheck };

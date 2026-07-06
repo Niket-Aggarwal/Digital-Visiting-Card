@@ -13,6 +13,7 @@ const cardSchema = new mongoose.Schema(
         bio: { type: String, required: true },
         email: { type: String, required: true },
         image: { type: String, default: null },
+        imageId: { type: String, default: null },
         phno: { type: String },
         github: { type: String },
         linkedin: { type: String },

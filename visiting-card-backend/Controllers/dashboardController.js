@@ -2,6 +2,7 @@ const authModel = require("../Models/authModel")
 const cardModel = require("../Models/cardModels")
 const { EmailCheck, Namecheck, tokencheck, tokenerr } = require("../Utility/Customwork")
 const { slugCreate, phnocheck } = require("../Utility/Dasboardwork")
+const { uploadImage, deleteImage } = require("../Utility/Upload");
 
 
 exports.Base = async (req, res) => {
@@ -89,40 +90,98 @@ exports.Firstupdate = async (req, res) => {
         const { name, headline, bio, email, slug } = req.body
         const exist = await cardModel.findOne({ authId: result.decoded.id });
         const originalSlug = exist.slug.split("-")[0];
-        if (name) {
+        let newslug = exist.slug, slugcheck;
+        const update = {}
+        if (email !== exist.email) {
             EmailCheck(email)
+            update.email = email
+        }
+        if (name !== exist.name) {
             Namecheck(name)
-            let newslug = exist.slug, slugcheck;
-            if (slug !== originalSlug) {
-                do {
-                    newslug = slugCreate(slug)
-                    slugcheck = await cardModel.findOne({ slug: newslug });
-                } while (slugcheck)
-            }
-            await cardModel.findOneAndUpdate({ authId: result.decoded.id },
-                { name, headline, bio, slug: newslug, email }
-            );
-            return res.status(200).send({
-                success: true,
-                message: "Basic Updated"
-            })
+            update.name = name
         }
-        const data = {
-            name: exist.name,
-            email: exist.email,
-            bio: exist.bio,
-            headline: exist.headline,
-            slug: originalSlug
+        if (bio !== exist.bio) {
+            update.bio = bio
         }
+        if (headline !== exist.headline) {
+            update.headline = headline
+        }
+        if (slug !== originalSlug) {
+            do {
+                newslug = slugCreate(slug)
+                slugcheck = await cardModel.findOne({ slug: newslug });
+            } while (slugcheck)
+            update.slug = newslug
+        }
+        await cardModel.findOneAndUpdate({ authId: result.decoded.id }, update);
         return res.status(200).send({
             success: true,
-            data
+            message: "Basic Updated"
         })
     } catch (err) {
         if (err.name === "ValidateError") {
             return res.status(400).json({
                 success: false,
                 under: true,
+                message: err.message
+            });
+        }
+        const result = tokenerr(err, "FirstUpdate Error:")
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        })
+    }
+}
+
+
+exports.Second = async (req, res) => {
+    try {
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
+        }
+        const { phone, check } = req.body
+        let phno = null, image = null, id = null
+        const img = req.file
+        if (phone) {
+            phnocheck(phone)
+            phno = phone
+        }
+        if (img) {
+            const exist = await cardModel.findOne({ authId: result.decoded.id });
+            if (exist.imageId) {
+                await deleteImage(exist.imageId)
+            }
+            const data = await uploadImage(img.buffer);
+            image = data.secure_url
+            id = data.public_id
+        } else if (check) {
+            const exist = await authModel.findById(result.decoded.id).select("-password");
+            image = exist.picture
+        }
+        await cardModel.findOneAndUpdate({ authId: result.decoded.id },
+            {
+                phno,
+                image,
+                imageId: id
+            }
+        )
+        return res.status(200).send({
+            success: true,
+            message: "Second Take Completed"
+        });
+    } catch (err) {
+        if (err.name === "ValidateError") {
+            return res.status(400).json({
+                success: false,
+                under: true,
+                message: err.message
+            });
+        }
+        if (err.name === "CloudinaryError") {
+            return res.status(500).send({
+                success: false,
                 message: err.message
             });
         }

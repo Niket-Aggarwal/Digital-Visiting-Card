@@ -66,3 +66,108 @@ export default Home
 // };
 
 // export default Home;
+
+// import { useState } from "react";
+
+// function Home() {
+
+//     const [phno, setPhno] = useState("");
+//     const [image, setImage] = useState(null);
+//     const [check, setCheck] = useState(false);
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+
+//         const formData = new FormData();
+
+//         formData.append("phno", phno);
+//         if(check){
+//             formData.append("check", check);
+//         }
+
+//         if (image) {
+//             formData.append("image", image);
+//         }
+
+//         try {
+
+//             const response = await fetch("http://localhost:3000/profile/create/second", {
+//                 method: "POST",
+//                 headers: {
+//                     Authorization: `Bearer ${localStorage.getItem("token")}`
+//                 },
+//                 body: formData
+//             });
+
+//             const data = await response.json();
+
+//             console.log(data);
+
+//             if (response.ok) {
+//                 alert("Success");
+//             } else {
+//                 alert(data.message);
+//             }
+
+//         } catch (err) {
+//             console.error(err);
+//             alert("Something went wrong");
+//         }
+//     };
+
+//     return (
+//         <div
+//             style={{
+//                 display: "flex",
+//                 justifyContent: "center",
+//                 alignItems: "center",
+//                 minHeight: "100vh"
+//             }}
+//         >
+//             <form onSubmit={handleSubmit}>
+
+//                 <h2>Cloudinary Upload Test</h2>
+
+//                 <br />
+
+//                 <input
+//                     type="text"
+//                     placeholder="Phone Number"
+//                     value={phno}
+//                     onChange={(e) => setPhno(e.target.value)}
+//                 />
+
+//                 <br />
+//                 <br />
+
+//                 <input
+//                     type="file"
+//                     accept=".jpg,.jpeg,.png,.webp"
+//                     onChange={(e) => setImage(e.target.files[0])}
+//                 />
+
+//                 <br />
+//                 <br />
+
+//                 <label>
+//                     <input
+//                         type="checkbox"
+//                         checked={check}
+//                         onChange={(e) => setCheck(e.target.checked)}
+//                     />
+//                     Use Auth Image
+//                 </label>
+
+//                 <br />
+//                 <br />
+
+//                 <button type="submit">
+//                     Submit
+//                 </button>
+
+//             </form>
+//         </div>
+//     );
+// }
+
+// export default Home;

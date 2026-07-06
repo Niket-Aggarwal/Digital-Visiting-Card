@@ -228,7 +228,7 @@ POST /profile/create/basic
 Second Take: Phno and upload
 
 ```
-POST /profile/create/second
+PATCH /profile/second
 ```
 
 Third Take: all social links
@@ -253,7 +253,7 @@ PATCH /profile/update/basic
 Second Take: Phno and upload
 
 ```
-PATCH /profile/update/second
+PATCH /profile/second
 ```
 
 Third Take: all social links
