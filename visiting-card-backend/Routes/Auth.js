@@ -1,6 +1,6 @@
 const express = require("express")
 
-const { Base, GoogleLogin, ActiveSession, Verify, Register, Delete, ForgetPassword, OtpVerfiy, PasswordReset } = require("../Controllers/authController")
+const { Base, GoogleLogin, ActiveSession, Verify, Register, ForgetPassword, OtpVerfiy, PasswordReset, Delete } = require("../Controllers/authController")
 
 const router = express.Router()
 

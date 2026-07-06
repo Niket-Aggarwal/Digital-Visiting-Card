@@ -234,13 +234,13 @@ PATCH /profile/second
 Third Take: all social links
 
 ```
-POST /profile/create/third
+PATCH /profile/third
 ```
 
 Final Take: layout and other details
 
 ```
-POST /profile/create/final
+PATCH /profile/final
 ```
 
 ### Update Profile
@@ -259,13 +259,13 @@ PATCH /profile/second
 Third Take: all social links
 
 ```
-PATCH /profile/update/third
+PATCH /profile/third
 ```
 
 Final Take: layout and other details
 
 ```
-PATCH /profile/update/final
+PATCH /profile/final
 ```
 
 ### Delete Profile

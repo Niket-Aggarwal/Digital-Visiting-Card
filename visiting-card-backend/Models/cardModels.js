@@ -21,10 +21,10 @@ const cardSchema = new mongoose.Schema(
         facebook: { type: String },
         telegram: { type: String },
         others: [
-            { platform: String, link: String }
+            { _id: false, platform: String, link: String }
         ],
-        theme: { type: String },
-        layout: { type: String },
+        theme: { type: String, default: "dark" },
+        layout: { type: String, default: "modern" },
         slug: { type: String, unique: true, required: true },
         isPublic: { type: Boolean, default: true },
         userType: { type: String, default: "free" }

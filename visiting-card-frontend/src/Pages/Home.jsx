@@ -81,7 +81,7 @@ export default Home
 
 //         const formData = new FormData();
 
-//         formData.append("phno", phno);
+//         formData.append("phone", phno);
 //         if(check){
 //             formData.append("check", check);
 //         }
@@ -92,8 +92,8 @@ export default Home
 
 //         try {
 
-//             const response = await fetch("http://localhost:3000/profile/create/second", {
-//                 method: "POST",
+//             const response = await fetch("http://localhost:3000/profile/second", {
+//                 method: "PATCH",
 //                 headers: {
 //                     Authorization: `Bearer ${localStorage.getItem("token")}`
 //                 },

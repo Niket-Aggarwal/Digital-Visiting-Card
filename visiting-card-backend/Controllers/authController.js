@@ -8,8 +8,11 @@ const { OtpVerificationMail } = require("../Utility/OtpVerificationMail")
 const { loginSuccessMail } = require("../Utility/loginSuccessMail")
 const { passwordUpdatedMail } = require("../Utility/passupdatemail")
 const { accountDeletedMail } = require("../Utility/deletionMail")
+const { deleteImage } = require("../Utility/Upload");
+
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+
 
 exports.Base = async (req, res) => {
     res.status(200).send({
@@ -239,6 +242,12 @@ exports.ForgetPassword = async (req, res) => {
                 message: "User with this email do not exist"
             })
         }
+        if(exist.authProvider==="Google"){
+            return res.status(404).send({
+                sucess: false,
+                message: "This account was registered using Google. Forget Password is not allowed."
+            })
+        }
         const { sent, otp, otpExpiry } = await OtpVerificationMail(exist.email, exist.name);
         if (!sent) {
             return res.status(500).json({
@@ -312,7 +321,7 @@ exports.PasswordReset = async (req, res) => {
             });
         }
         const hashedPassword = await Passcreate(password);
-        await authModel.findOneAndUpdate({ email: exist.email }, { password: hashedPassword })
+        const add = await authModel.findOneAndUpdate({ email: exist.email }, { password: hashedPassword })
         await verifyModel.deleteOne({ email });
         passwordUpdatedMail(add.email, add.name)
         return res.status(200).send({
@@ -349,8 +358,11 @@ exports.Delete = async (req, res) => {
                 message: "User not found"
             });
         }
-        await cardModel.deleteOne({ authId: result.decoded.id });
+        const final = await cardModel.findOneAndDelete({ authId: result.decoded.id });
         await authModel.findByIdAndDelete(result.decoded.id);
+        if (final.imageId) {
+            await deleteImage(final.imageId)
+        }
         accountDeletedMail(exist.email, exist.name)
         return res.status(200).send({
             success: true,

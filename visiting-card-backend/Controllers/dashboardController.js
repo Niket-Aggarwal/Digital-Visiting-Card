@@ -81,6 +81,143 @@ exports.FirstTake = async (req, res) => {
 }
 
 
+exports.Second = async (req, res) => {
+    try {
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
+        }
+        const { phone, check } = req.body
+        let phno = null, image = null, id = null
+        const img = req.file
+        if (phone) {
+            phnocheck(phone)
+            phno = phone
+        }
+        if (img) {
+            const exist = await cardModel.findOne({ authId: result.decoded.id });
+            if (exist.imageId) {
+                await deleteImage(exist.imageId)
+            }
+            const data = await uploadImage(img.buffer);
+            image = data.secure_url
+            id = data.public_id
+        } else if (check) {
+            const exist = await authModel.findById(result.decoded.id).select("-password");
+            image = exist.picture
+        }
+        await cardModel.findOneAndUpdate({ authId: result.decoded.id },
+            {
+                phno,
+                image,
+                imageId: id
+            }
+        )
+        return res.status(200).send({
+            success: true,
+            message: "Second Completed"
+        });
+    } catch (err) {
+        if (err.name === "ValidateError") {
+            return res.status(400).json({
+                success: false,
+                under: true,
+                message: err.message
+            });
+        }
+        if (err.name === "CloudinaryError") {
+            return res.status(500).send({
+                success: false,
+                message: err.message
+            });
+        }
+        const result = tokenerr(err, "Second Error:")
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        })
+    }
+}
+
+
+exports.Third = async (req, res) => {
+    try {
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
+        }
+        const { telegram, facebook, instagram, linkedin, github, others } = req.body
+        const Others = Array.isArray(others) ? others : [];
+        const reserved = ["instagram", "facebook", "telegram", "linkedin", "github"];
+        for (let i = 0; i < Others.length; i++) {
+            const platform = Others[i].platform.trim().toLowerCase();
+            if (reserved.includes(platform)) {
+                return res.status(400).send({
+                    success: false,
+                    under: true,
+                    message: `${Others[i].platform} is already a default social platform.`
+                });
+            }
+        }
+        for (let i = 0; i < Others.length; i++) {
+            for (let j = i + 1; j < Others.length; j++) {
+                if (Others[i].platform.trim().toLowerCase() === Others[j].platform.trim().toLowerCase()) {
+                    return res.status(400).send({
+                        success: false,
+                        under: true,
+                        message: `Duplicate platform "${Others[i].platform}" is not allowed.`
+                    });
+                }
+            }
+        }
+        await cardModel.findOneAndUpdate({ authId: result.decoded.id },
+            {
+                telegram: telegram ?? null,
+                facebook: facebook ?? null,
+                instagram: instagram ?? null,
+                linkedin: linkedin ?? null,
+                github: github ?? null,
+                others: Others
+            }
+        )
+        return res.status(200).send({
+            success: true,
+            message: "Third Completed"
+        });
+    } catch (err) {
+        const result = tokenerr(err, "Third Error:")
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        })
+    }
+}
+
+
+exports.Final = async (req, res) => {
+    try {
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
+        }
+        const { theme, layout, isPublic } = req.body
+        await cardModel.findOneAndUpdate({ authId: result.decoded.id },
+            { theme, layout, isPublic }
+        )
+        return res.status(200).send({
+            success: true,
+            message: "Final Completed"
+        });
+    } catch (err) {
+        const result = tokenerr(err, "Final Error:")
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        })
+    }
+}
+
+
 exports.Firstupdate = async (req, res) => {
     try {
         const result = tokencheck(req.headers.authorization);
@@ -135,65 +272,6 @@ exports.Firstupdate = async (req, res) => {
 }
 
 
-exports.Second = async (req, res) => {
-    try {
-        const result = tokencheck(req.headers.authorization);
-        if (!result.success) {
-            return res.status(401).send(result);
-        }
-        const { phone, check } = req.body
-        let phno = null, image = null, id = null
-        const img = req.file
-        if (phone) {
-            phnocheck(phone)
-            phno = phone
-        }
-        if (img) {
-            const exist = await cardModel.findOne({ authId: result.decoded.id });
-            if (exist.imageId) {
-                await deleteImage(exist.imageId)
-            }
-            const data = await uploadImage(img.buffer);
-            image = data.secure_url
-            id = data.public_id
-        } else if (check) {
-            const exist = await authModel.findById(result.decoded.id).select("-password");
-            image = exist.picture
-        }
-        await cardModel.findOneAndUpdate({ authId: result.decoded.id },
-            {
-                phno,
-                image,
-                imageId: id
-            }
-        )
-        return res.status(200).send({
-            success: true,
-            message: "Second Take Completed"
-        });
-    } catch (err) {
-        if (err.name === "ValidateError") {
-            return res.status(400).json({
-                success: false,
-                under: true,
-                message: err.message
-            });
-        }
-        if (err.name === "CloudinaryError") {
-            return res.status(500).send({
-                success: false,
-                message: err.message
-            });
-        }
-        const result = tokenerr(err, "FirstUpdate Error:")
-        return res.status(result.status).send({
-            success: result.success,
-            message: result.message
-        })
-    }
-}
-
-
 exports.Getprofile = async (req, res) => {
     try {
         const { slug } = req.body
@@ -236,6 +314,9 @@ exports.Delete = async (req, res) => {
                 success: false,
                 message: "No Card is created"
             });
+        }
+        if (exist.imageId) {
+            await deleteImage(exist.imageId)
         }
         await cardModel.deleteOne({ authId: result.decoded.id });
         return res.status(200).send({
