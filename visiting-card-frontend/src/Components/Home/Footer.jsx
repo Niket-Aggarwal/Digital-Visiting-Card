@@ -1,13 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaInstagram, FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
-import Logo from "../assets/Logo.png";
+import { Samepagetop } from "../../Utility/Functions";
+import Logo from "../../assets/Logo.png";
 
 const Footer = () => {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="border-t border-blue-500/20 bg-linear-to-b from-slate-950 to-black text-gray-300">
+        <footer className="relative border-t border-blue-500/20 bg-[#020617]/75 backdrop-blur-2xl text-gray-300">
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+                <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-[120px]" />
+                <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[120px]" />
+            </div>
             <div className="mx-auto max-w-7xl px-6 py-14">
                 <div className="grid gap-10 md:grid-cols-4">
                     <section>
@@ -23,32 +28,28 @@ const Footer = () => {
                             contact information effortlessly.
                         </p>
                     </section>
-
-                    {/* Platform */}
                     <section className="hidden md:block">
                         <h2 className="mb-5 text-lg font-semibold text-white">
                             Platform
                         </h2>
                         <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to="/" className="transition hover:text-blue-400">
+                                <Link to="/" onClick={Samepagetop} className="transition hover:text-blue-400">
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/login" className="transition hover:text-blue-400">
+                                <Link to="/login" onClick={Samepagetop} className="transition hover:text-blue-400">
                                     Login
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/signup" className="transition hover:text-blue-400">
+                                <Link to="/signup" onClick={Samepagetop} className="transition hover:text-blue-400">
                                     Sign Up
                                 </Link>
                             </li>
                         </ul>
                     </section>
-
-                    {/* Resources */}
                     <section>
                         <h2 className="mb-5 text-lg font-semibold text-white">
                             Resources
@@ -66,8 +67,6 @@ const Footer = () => {
                             </li>
                         </ul>
                     </section>
-
-                    {/* Connect */}
                     <section>
                         <h2 className="mb-5 text-lg font-semibold text-white">
                             Connect
@@ -85,11 +84,7 @@ const Footer = () => {
                         </div>
                     </section>
                 </div>
-
-                {/* Divider */}
                 <div className="my-10 border-t border-blue-500/20"></div>
-
-                {/* Bottom */}
                 <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-500 md:flex-row">
                     <p>
                         © {year} NexLink. All rights reserved.
