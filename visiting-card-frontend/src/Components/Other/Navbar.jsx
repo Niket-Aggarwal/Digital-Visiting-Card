@@ -21,31 +21,61 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="hidden items-center gap-4 sm:flex">
-          {!isLoginPage && (
+          {isHomePage && (
+            <>
+              <Link to="/login"
+                className="rounded-lg border border-blue-500 px-5 py-2 font-medium text-blue-400 transition duration-300 hover:bg-blue-500 hover:text-white"
+              >
+                Login
+              </Link>
+              <Link to="/signup"
+                className="rounded-lg bg-linear-to-r from-blue-600 to-cyan-500 px-5 py-2 font-medium text-white transition duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/40"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+          {isLoginPage && (
+            <Link to="/signup"
+              className="rounded-lg bg-linear-to-r from-blue-600 to-cyan-500 px-5 py-2 font-medium text-white transition duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/40"
+            >
+              Sign Up
+            </Link>
+
+          )}
+          {isSignupPage && (
             <Link to="/login"
               className="rounded-lg border border-blue-500 px-5 py-2 font-medium text-blue-400 transition duration-300 hover:bg-blue-500 hover:text-white"
             >
               Login
             </Link>
           )}
-          {!isSignupPage && (
+        </div>
+        <div className="sm:hidden">
+          {isHomePage && (
+            <Link to="/login"
+              className="rounded-lg border border-blue-500 px-5 py-2 font-medium text-blue-400 transition duration-300 hover:bg-blue-500 hover:text-white"
+            >
+              Login
+            </Link>
+
+          )}
+          {isLoginPage && (
             <Link to="/signup"
               className="rounded-lg bg-linear-to-r from-blue-600 to-cyan-500 px-5 py-2 font-medium text-white transition duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/40"
             >
               Sign Up
             </Link>
+
           )}
-        </div>
-        {!isHomePage && (
-        <div className="sm:hidden">
-          
+          {isSignupPage && (
             <Link to="/login"
-              className="rounded-lg border border-blue-500 px-4 py-2 text-sm font-medium text-blue-400 transition duration-300 hover:bg-blue-500 hover:text-white"
+              className="rounded-lg border border-blue-500 px-5 py-2 font-medium text-blue-400 transition duration-300 hover:bg-blue-500 hover:text-white"
             >
               Login
             </Link>
+          )}
         </div>
-        )}
       </nav>
     </header>
   );

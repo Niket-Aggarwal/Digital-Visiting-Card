@@ -1,11 +1,12 @@
 import React from 'react'
 import Navbar from "../Components/Other/Navbar"
 import Head from "../Components/Home/Head"
-import ProfileCard from "../Components/Home/Card";
-import WhyNexLink from "../Components/Home/WhyNexlink";
+import ProfileCard from "../Components/Other/Card"
+import WhyNexLink from "../Components/Home/WhyNexlink"
 import CTA from "../Components/Home/CTA"
-import Getstart from '../Components/Home/Getstart';
+import Getstart from '../Components/Home/Getstart'
 import Footer from "../Components/Home/Footer"
+import Avatar from "../assets/Avtar.png"
 
 
 const Home = () => {
@@ -17,8 +18,16 @@ const Home = () => {
                     <div className="w-full lg:w-1/2">
                         <Head />
                     </div>
-                    <div className="hidden lg:flex lg:w-1/2 justify-center">
-                        <ProfileCard />
+                    <div className="lg:flex lg:w-1/2 justify-center">
+                        <ProfileCard
+                            name={"Niket Aggarwal"}
+                            bio={"Full Stack Developer"}
+                            about={
+                                `Passionate about building modern web applications,
+                                scalable backend systems and creating beautiful user
+                                experiences.`
+                            }
+                            img={Avatar} />
                     </div>
                 </section>
                 <section className="mx-auto max-w-7xl px-6 py-24" aria-labelledby="why-nexlink">
