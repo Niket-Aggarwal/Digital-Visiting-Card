@@ -1,10 +1,11 @@
 import React from 'react'
+import Google from '../Components/Authentication/Google'
 
 const Signup = () => {
 
     return (
         <>
-            <p className='bg-amber-600'>Signup</p>
+            <Google />
         </>
     )
 }
