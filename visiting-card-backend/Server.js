@@ -6,6 +6,7 @@ const dbCollections = require("./Config/DatabaseConnection")
 const auth = require("./Routes/Auth")
 const dash = require("./Routes/Dashboard")
 const uploadError = require("./Middleware/Error");
+const reviewModel = require("./Models/reviewModel")
 
 
 const app = express()
@@ -24,6 +25,17 @@ app.get("/", (req, res) => {
     message: "This is Base Url"
   });
 });
+
+
+app.post("/feedback", async (req, res) => {
+  const { feedback } = req.body
+  await reviewModel.create({ feedback })
+  res.status(200).send({
+    Title: "NexLink",
+    Tagline: "Next Generation Digital Identity",
+    message: "Feedback added"
+  });
+})
 
 
 app.use("/auth", auth)

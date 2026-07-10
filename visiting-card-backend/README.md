@@ -84,6 +84,16 @@ Stores the user's public digital identity.
 }
 ```
 
+## 4. Feedback Collection
+Store Feedback
+
+```javascript
+{
+    feedback
+}
+```
+
+
 # 🔐 Authentication
 NexLink supports two authentication methods.
 
@@ -273,6 +283,13 @@ Deletes digital identity card.
 
 ```
 DELETE /profile/delete
+```
+
+### Feedback
+This is to collect feedback anamynous
+
+```
+POST /feedback
 ```
 
 ### Public Profile
