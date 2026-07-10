@@ -1,4 +1,4 @@
-const cloudinary = require("../Config/cloudinary");
+const cloudinary = require("../Config/Cloudinary");
 const streamifier = require("streamifier");
 
 const uploadImage = (buffer) => {
