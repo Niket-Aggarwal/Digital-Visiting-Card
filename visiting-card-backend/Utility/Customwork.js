@@ -38,7 +38,7 @@ const Passcreate = async (password) => {
 const Passvalidate = async (password, hashedPassword, name, email) => {
     const ispassMatch = await bcrypt.compare(password, hashedPassword);
     if (!ispassMatch) {
-        await IncorrectPasswordMail(email, name)
+        IncorrectPasswordMail(email, name)
         const err = new Error("Password Incorrect")
         err.name = "ValidateError";
         err.type = "password";
