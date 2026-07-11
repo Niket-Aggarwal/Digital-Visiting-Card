@@ -22,7 +22,7 @@ exports.Main = async (req, res) => {
         }
         const exist = await cardModel.findOne({ authId: result.decoded.id }).select("-_id -__v -createdAt -updatedAt -authId");
         if (!exist) {
-            return res.status(200).json({
+            return res.status(200).send({
                 success: false,
                 message: "Lets Make your First Digital Identiy"
             });
@@ -66,9 +66,10 @@ exports.FirstTake = async (req, res) => {
         })
     } catch (err) {
         if (err.name === "ValidateError") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 under: true,
+                type: err.type,
                 message: err.message
             });
         }
@@ -119,9 +120,10 @@ exports.Second = async (req, res) => {
         });
     } catch (err) {
         if (err.name === "ValidateError") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 under: true,
+                type: err.type,
                 message: err.message
             });
         }
@@ -257,9 +259,10 @@ exports.Firstupdate = async (req, res) => {
         })
     } catch (err) {
         if (err.name === "ValidateError") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 under: true,
+                type: err.type,
                 message: err.message
             });
         }
@@ -283,7 +286,7 @@ exports.Getprofile = async (req, res) => {
             });
         }
         if (!exist.isPublic) {
-            return res.status(404).json({
+            return res.status(404).send({
                 success: false,
                 message: "Sorry! this profile is private"
             });
@@ -294,7 +297,7 @@ exports.Getprofile = async (req, res) => {
         });
     } catch (err) {
         console.error('GetProfile:', err)
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: "Something went wrong."
         });

@@ -1,6 +1,4 @@
-const url = import.meta.env.VITE_API_URL_LOCAL;
-
-export const CallAPI = async (path, method, data = {}, token = null) => {
+export const CallAPI = async (path,method,data = {},token = null) => {
     try {
         const headers = {
             "Content-Type": "application/json",
@@ -8,28 +6,21 @@ export const CallAPI = async (path, method, data = {}, token = null) => {
         if (token) {
             headers.Authorization = `Bearer ${token}`;
         }
-        let res;
-        if (method === "GET") {
-            res = await fetch(`${url}${path}`, {
-                method,
-                headers,
-            });
-        } else {
-            res = await fetch(`${url}${path}`, {
-                method,
-                headers,
-                body: JSON.stringify(data),
-            });
+        const options = {
+            method,
+            headers,
+        };
+        if (method !== "GET") {
+            options.body = JSON.stringify(data);
         }
-        if (!res.ok) {
-            throw new Error("Request failed");
-        }
-        return await res.json();
+        const res = await fetch(`/api${path}`, options);
+        const result = await res.json();
+        return result;
     } catch (err) {
         console.error("API Calling Error:", err);
         return {
             success: false,
-            message: "Issue in connecting to backend",
+            message: "Issue in connecting to Server",
         };
     }
 };

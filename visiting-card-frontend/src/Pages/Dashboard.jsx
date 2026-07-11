@@ -4,7 +4,7 @@ import useCard from "../Hooks/useCard";
 
 const Dashboard = () => {
 
-  const {user,messuser}=useAuth()
+  const {user,messuser,logout}=useAuth()
   const {card,messcard}=useCard()
   console.log(user)
   console.log(card)
@@ -12,7 +12,8 @@ const Dashboard = () => {
   console.log(messuser)
   return (
     <div>
-        <p className='bg-amber-500'>h</p>      
+        <p className='bg-amber-500'>h</p>    
+        <button onClick={logout} className='bg-blue-50'>logout</button>  
     </div>
   )
 }

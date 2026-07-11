@@ -10,6 +10,7 @@ const phnocheck = (phno) => {
     if (!validator.isMobilePhone(phno, "en-IN")) {
         const err = new Error("Not a valid Phone Number");
         err.name = "ValidateError";
+        err.type = "phone"
         throw err;
     }
 };

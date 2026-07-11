@@ -32,6 +32,22 @@ export const Session = async () => {
     }
 }
 
+export const loginuser = async (data) => {
+    try {
+        const result = await CallAPI("/auth/verify", "POST", data)
+        if (result.success) {
+            localStorage.setItem("token", result.token)
+        }
+        return result
+    } catch (err) {
+        console.error("LoginError:", err);
+        return {
+            success: false,
+            message: "Login Issue",
+        };
+    }
+}
+
 export const Dashboard = async () => {
     try {
         const result = await CallAPI("/profile/main", "GET", {}, localStorage.getItem("token"))

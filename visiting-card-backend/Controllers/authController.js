@@ -78,7 +78,7 @@ exports.ActiveSession = async (req, res) => {
         }
         const exist = await authModel.findById(result.decoded.id).select("-password");
         if (!exist) {
-            return res.status(401).json({
+            return res.status(401).send({
                 success: false,
                 message: "User Not found"
             });
@@ -112,12 +112,12 @@ exports.Verify = async (req, res) => {
             const exist = await authModel.findOne({ email }).select("-password");
             if (exist) {
                 if (exist.authProvider === "Google") {
-                    return res.status(400).json({
+                    return res.status(400).send({
                         success: false,
                         message: "This account was registered using Google. Please continue with Google Authentication."
                     });
                 }
-                return res.status(400).json({
+                return res.status(400).send({
                     success: false,
                     under: true,
                     message: "Email already registered."
@@ -126,7 +126,7 @@ exports.Verify = async (req, res) => {
             const hashedPassword = await Passcreate(password);
             const { sent, otp, otpExpiry } = await OtpVerificationMail(email, name);
             if (!sent) {
-                return res.status(500).json({
+                return res.status(500).send({
                     success: false,
                     message: "Unable to send verification email."
                 });
@@ -140,7 +140,7 @@ exports.Verify = async (req, res) => {
                 },
                 { upsert: true }
             );
-            return res.status(200).json({
+            return res.status(200).send({
                 success: true,
                 redirect: true,
                 message: "OTP sent successfully.",
@@ -149,13 +149,13 @@ exports.Verify = async (req, res) => {
         }
         const exist = await authModel.findOne({ email });
         if (!exist) {
-            return res.status(404).json({
+            return res.status(404).send({
                 success: false,
                 message: "Email Invalid"
             });
         }
         if (exist.authProvider === "Google") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 message: "This account was registered using Google. Please continue with Google Authentication."
             });
@@ -163,7 +163,7 @@ exports.Verify = async (req, res) => {
         await Passvalidate(password, exist.password, exist.name, exist.email);
         const token = jwt.sign({ id: exist._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
         loginSuccessMail(exist.email, exist.name)
-        return res.status(200).json({
+        return res.status(200).send({
             success: true,
             user: {
                 id: exist._id,
@@ -175,14 +175,15 @@ exports.Verify = async (req, res) => {
         });
     } catch (err) {
         if (err.name === "ValidateError") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 under: true,
+                type: err.type,
                 message: err.message
             });
         }
         console.error("Verify Error:", err);
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: "Something went wrong."
         });
@@ -196,7 +197,7 @@ exports.Register = async (req, res) => {
         const exist = await verifyModel.findOne({ email });
         if (new Date() > exist.otpExpiry || exist.otp !== otp) {
             const verifyier = { name: exist.name, email: exist.email }
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 message: "OTP Error Ask Again",
                 verifyier
@@ -223,7 +224,7 @@ exports.Register = async (req, res) => {
         })
     } catch (err) {
         console.error("Register Error:", err);
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: "Something went wrong."
         });
@@ -242,7 +243,7 @@ exports.ForgetPassword = async (req, res) => {
                 message: "User with this email do not exist"
             })
         }
-        if(exist.authProvider==="Google"){
+        if (exist.authProvider === "Google") {
             return res.status(404).send({
                 sucess: false,
                 message: "This account was registered using Google. Forget Password is not allowed."
@@ -250,7 +251,7 @@ exports.ForgetPassword = async (req, res) => {
         }
         const { sent, otp, otpExpiry } = await OtpVerificationMail(exist.email, exist.name);
         if (!sent) {
-            return res.status(500).json({
+            return res.status(500).send({
                 success: false,
                 message: "Unable to send verification email."
             });
@@ -263,21 +264,22 @@ exports.ForgetPassword = async (req, res) => {
             },
             { upsert: true }
         );
-        return res.status(200).json({
+        return res.status(200).send({
             success: true,
             message: "OTP sent successfully.",
             email
         });
     } catch (err) {
         if (err.name === "ValidateError") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 under: true,
+                type: err.type,
                 message: err.message
             });
         }
         console.error("Reset Check Error:", err);
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: "Something went wrong."
         });
@@ -290,7 +292,7 @@ exports.OtpVerfiy = async (req, res) => {
         const { email, otp } = req.body
         const exist = await verifyModel.findOne({ email });
         if (new Date() > exist.otpExpiry || exist.otp !== otp) {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 message: "OTP Error Ask Again",
             });
@@ -301,7 +303,7 @@ exports.OtpVerfiy = async (req, res) => {
         })
     } catch (err) {
         console.error("OTP check Error", err);
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: "Something went wrong."
         });
@@ -315,7 +317,7 @@ exports.PasswordReset = async (req, res) => {
         const exist = await verifyModel.findOne({ email });
         Passcheck(password)
         if (!(password === confirm)) {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 message: "Password doesnot match",
             });
@@ -330,14 +332,15 @@ exports.PasswordReset = async (req, res) => {
         })
     } catch (err) {
         if (err.name === "ValidateError") {
-            return res.status(400).json({
+            return res.status(400).send({
                 success: false,
                 under: true,
+                type: err.type,
                 message: err.message
             });
         }
         console.error("Password Reset", err);
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: "Something went wrong."
         });
@@ -363,7 +366,7 @@ exports.Delete = async (req, res) => {
         if (final.imageId) {
             await deleteImage(final.imageId)
         }
-        accountDeletedMail(exist.email, exist.name)
+        await accountDeletedMail(exist.email, exist.name)
         return res.status(200).send({
             success: true,
             message: "Account deleted successfully"

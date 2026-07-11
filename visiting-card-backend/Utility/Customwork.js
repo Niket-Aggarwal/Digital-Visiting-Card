@@ -7,6 +7,7 @@ const Namecheck = (name) => {
     if (!validator.isAlpha(name.replace(/\s/g, ""))) {
         const err = new Error("Only alphabets are allowed in name.");
         err.name = "ValidateError";
+        err.type = "name";
         throw err;
     }
 };
@@ -15,6 +16,7 @@ const EmailCheck = (email) => {
     if (!validator.isEmail(email)) {
         const err = new Error("Email is not valid.");
         err.name = "ValidateError";
+        err.type = "email";
         throw err;
     }
 }
@@ -23,6 +25,7 @@ const Passcheck = (password) => {
     if (!validator.isStrongPassword(password)) {
         const err = new Error("Create a stronger password.");
         err.name = "ValidateError";
+        err.type = "password";
         throw err;
     }
 }
@@ -35,9 +38,10 @@ const Passcreate = async (password) => {
 const Passvalidate = async (password, hashedPassword, name, email) => {
     const ispassMatch = await bcrypt.compare(password, hashedPassword);
     if (!ispassMatch) {
-        IncorrectPasswordMail(email, name)
+        await IncorrectPasswordMail(email, name)
         const err = new Error("Password Incorrect")
         err.name = "ValidateError";
+        err.type = "password";
         throw err;
     }
 };
