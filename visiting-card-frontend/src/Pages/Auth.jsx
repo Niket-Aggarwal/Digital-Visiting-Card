@@ -7,7 +7,10 @@ import ProfileCard from "../Components/Other/Card"
 const Auth = () => {
 
     const location = useLocation();
-    const isLogin = location.pathname === "/login";
+    const isLogin = (
+        location.pathname === "/login" ||
+        location.pathname === "/forget-verify" ||
+        location.pathname === "/password-reset")
 
     return (
         <>

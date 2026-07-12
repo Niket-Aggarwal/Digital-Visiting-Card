@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import useAuth from "../Hooks/useAuth";
 import useCard from "../Hooks/useCard";
@@ -9,6 +9,8 @@ import { loginuser } from "../Utility/APIFunctions";
 const Login = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const successMessage = location.state?.message;
     const [showPassword, setShowPassword] = useState(false);
     const [data, setData] = useState({ email: "", password: "", });
     const [fieldError, setFieldError] = useState({ email: null, password: null, });
@@ -26,6 +28,12 @@ const Login = () => {
             { ...prev, [name]: null, }
         ));
         setError(null);
+        if (location.state?.message) {
+            navigate(location.pathname, {
+                replace: true,
+                state: null
+            });
+        }
     };
 
     const call = async (e) => {
@@ -93,8 +101,8 @@ const Login = () => {
                         />
                         <input id="email" type="email" name="email" placeholder="you@example.com" value={data.email} onChange={handleChange}
                             className={`w-full rounded-xl border bg-slate-900/60 py-3 pl-12 pr-4 text-white outline-none transition duration-300 placeholder:text-gray-600 ${fieldError.email
-                                    ? "border-red-500/60 focus:border-red-400 focus:shadow-[0_0_20px_rgba(239,68,68,0.12)]"
-                                    : "border-blue-500/20 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.12)]"
+                                ? "border-red-500/60 focus:border-red-400 focus:shadow-[0_0_20px_rgba(239,68,68,0.12)]"
+                                : "border-blue-500/20 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.12)]"
                                 }`}
                         />
                     </div>
@@ -115,8 +123,8 @@ const Login = () => {
                         <input id="password" type={showPassword ? "text" : "password"} name="password" placeholder="Enter your password"
                             value={data.password} onChange={handleChange}
                             className={`w-full rounded-xl border bg-slate-900/60 py-3 pl-12 pr-12 text-white outline-none transition duration-300 placeholder:text-gray-600 ${fieldError.password
-                                    ? "border-red-500/60 focus:border-red-400 focus:shadow-[0_0_20px_rgba(239,68,68,0.12)]"
-                                    : "border-blue-500/20 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.12)]"
+                                ? "border-red-500/60 focus:border-red-400 focus:shadow-[0_0_20px_rgba(239,68,68,0.12)]"
+                                : "border-blue-500/20 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.12)]"
                                 }`}
                         />
                         <button type="button" onClick={() => setShowPassword((prev) => !prev)}
@@ -133,11 +141,16 @@ const Login = () => {
                     )}
                 </div>
                 <div className="flex justify-end">
-                    <Link to="/forgot-password" className="text-sm text-blue-400 transition hover:text-cyan-400"
+                    <Link to="/forget-verify" state={{ fromLogin: true }} className="text-sm text-blue-400 transition hover:text-cyan-400"
                     >
                         Forgot password?
                     </Link>
                 </div>
+                {successMessage && !error && (
+                    <div className="rounded-lg border border-green-500/20 bg-green-500/10 px-4 py-3 text-center text-sm text-green-400">
+                        {successMessage}
+                    </div>
+                )}
                 {error && (
                     <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-center text-sm text-red-400">
                         {error}

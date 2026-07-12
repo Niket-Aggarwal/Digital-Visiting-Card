@@ -48,6 +48,75 @@ export const loginuser = async (data) => {
     }
 }
 
+export const signupuser = async (data) => {
+    try {
+        const result = await CallAPI("/auth/verify", "POST", data);
+        return result;
+    } catch (err) {
+        console.error("Signup Error:", err);
+        return {
+            success: false,
+            message: "Signup Issue",
+        };
+    }
+};
+
+export const registeruser = async (data) => {
+    try {
+        const result = await CallAPI("/auth/register", "POST", data);
+        if (result.success) {
+            localStorage.setItem("token", result.token);
+        }
+        return result;
+    } catch (err) {
+        console.error("Register Error:", err);
+        return {
+            success: false,
+            message: "OTP Verification Issue",
+        };
+    }
+};
+
+export const forgetPassword = async (data) => {
+    try {
+        const result = await CallAPI("/auth/forget", "POST", data);
+        return result
+    } catch (err) {
+        console.error("Forget Password Error:", err);
+        return {
+            success: false,
+            message: "Forget Password Issue"
+        };
+    }
+};
+
+
+export const verifyResetOtp = async (data) => {
+    try {
+        const result = await CallAPI("/auth/otpverify", "POST", data);
+        return result
+    } catch (err) {
+        console.error("OTP Verify Error:", err);
+        return {
+            success: false,
+            message: "OTP Verification Issue"
+        };
+    }
+};
+
+export const resetPassword = async (data) => {
+    try {
+        const result = await CallAPI("/auth/passupdate", "PATCH", data);
+        return result
+    } catch (err) {
+        console.error("Password Reset Error:", err);
+        return {
+            success: false,
+            message: "Password Reset Issue"
+        };
+    }
+};
+
 export const Dashboard = async () => {
     try {
         const result = await CallAPI("/profile/main", "GET", {}, localStorage.getItem("token"))

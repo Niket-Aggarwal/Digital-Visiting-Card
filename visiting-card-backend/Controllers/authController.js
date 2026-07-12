@@ -319,6 +319,8 @@ exports.PasswordReset = async (req, res) => {
         if (!(password === confirm)) {
             return res.status(400).send({
                 success: false,
+                under: true,
+                type: "confirm",
                 message: "Password doesnot match",
             });
         }
