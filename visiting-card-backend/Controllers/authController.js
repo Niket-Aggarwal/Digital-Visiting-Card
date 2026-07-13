@@ -365,7 +365,7 @@ exports.Delete = async (req, res) => {
         }
         const final = await cardModel.findOneAndDelete({ authId: result.decoded.id });
         await authModel.findByIdAndDelete(result.decoded.id);
-        if (final.imageId) {
+        if (final?.imageId) {
             await deleteImage(final.imageId)
         }
         await accountDeletedMail(exist.email, exist.name)

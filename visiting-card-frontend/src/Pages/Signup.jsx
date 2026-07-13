@@ -170,7 +170,7 @@ const Signup = () => {
                                 }`}
                         />
                         <button type="button" onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-cyan-400"
+                            className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-cyan-400"
                         >
                             {showPassword ? <FiEyeOff /> : <FiEye />}
                         </button>
@@ -187,7 +187,7 @@ const Signup = () => {
                     </div>
                 )}
                 <button type="submit" disabled={signupLoading}
-                    className="flex w-full items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+                    className="flex cursor-pointer w-full items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
                 >
                     {signupLoading ?
                         (<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />) :

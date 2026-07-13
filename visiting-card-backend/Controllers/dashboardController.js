@@ -305,6 +305,30 @@ exports.Getprofile = async (req, res) => {
 };
 
 
+exports.Visible = async (req, res) => {
+    try {
+        const result = tokencheck(req.headers.authorization);
+        if (!result.success) {
+            return res.status(401).send(result);
+        }
+        const exist = await cardModel.findOne({ authId: result.decoded.id });
+        const isPublic = !exist.isPublic;
+        await cardModel.findOneAndUpdate({ authId: result.decoded.id }, { isPublic });
+        return res.status(200).send({
+            success: true,
+            message: isPublic ? "Identity is now public" : "Identity is now private",
+            isPublic
+        });
+    } catch (err) {
+        const result = tokenerr(err, "Status Error:");
+        return res.status(result.status).send({
+            success: result.success,
+            message: result.message
+        });
+    }
+};
+
+
 exports.Delete = async (req, res) => {
     try {
         const result = tokencheck(req.headers.authorization);
@@ -318,7 +342,7 @@ exports.Delete = async (req, res) => {
                 message: "No Card is created"
             });
         }
-        if (exist.imageId) {
+        if (exist?.imageId) {
             await deleteImage(exist.imageId)
         }
         await cardModel.deleteOne({ authId: result.decoded.id });

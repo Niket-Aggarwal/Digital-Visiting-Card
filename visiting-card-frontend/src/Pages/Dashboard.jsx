@@ -1,23 +1,27 @@
 import useAuth from "../Hooks/useAuth";
-import useCard from "../Hooks/useCard";
+
+import ProfileSection from "../Components/Dashboard/ProfileSection";
+import IdentitySection from "../Components/Dashboard/IdentitySection";
+import PremiumSection from "../Components/Dashboard/PremiumSection";
+import DangerSection from "../Components/Dashboard/DangerSection";
 
 const Dashboard = () => {
 
-    const { user, logout } = useAuth();
-    const { card } = useCard();
+    const { user } = useAuth();
 
     return (
-        <div>
-
-            <h1 className="text-3xl font-bold text-white">
-                Dashboard
-            </h1>
-
-            <p className="mt-2 text-gray-400">
-                Welcome back, {user?.name}
-            </p>
-            <button onClick={logout} className="bg-amber-500">Hel</button>
-
+        <div className="w-full">
+            <div className="mb-6 sm:mb-8">
+                <h1 className="text-2xl font-bold text-white sm:text-3xl">
+                    Identity Center
+                </h1>
+            </div>
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-2 xl:gap-6">
+                <ProfileSection />
+                <IdentitySection />
+                <PremiumSection />
+                <DangerSection />
+            </div>
         </div>
     );
 };

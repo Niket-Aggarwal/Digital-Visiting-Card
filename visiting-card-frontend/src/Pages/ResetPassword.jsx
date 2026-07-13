@@ -86,7 +86,6 @@ const ResetPassword = () => {
             : "border-blue-500/20 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.12)]"
         }`;
 
-
     return (
         <div className="w-full">
             <div className="mb-8 text-center">
@@ -108,7 +107,7 @@ const ResetPassword = () => {
                             onChange={handleChange} className={inputClass(fieldError.password)}
                         />
                         <button type="button" onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-cyan-400"
+                            className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-cyan-400"
                         >
                             {showPassword ? <FiEyeOff /> : <FiEye />}
                         </button>
@@ -129,7 +128,7 @@ const ResetPassword = () => {
                             onChange={handleChange} className={inputClass(fieldError.confirm)}
                         />
                         <button type="button" onClick={() => setShowConfirm((prev) => !prev)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-cyan-400"
+                            className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-cyan-400"
                         >
                             {showConfirm ? <FiEyeOff /> : <FiEye />}
                         </button>
@@ -146,7 +145,7 @@ const ResetPassword = () => {
                     </div>
                 )}
                 <button type="submit" disabled={loading}
-                    className="flex w-full items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex cursor-pointer w-full items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {loading ?
                         (<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />) :

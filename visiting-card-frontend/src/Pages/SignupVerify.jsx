@@ -101,7 +101,7 @@ const Signupverify = () => {
                     </div>
                 )}
                 <button type="submit" disabled={otpLoading}
-                    className="flex w-full items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+                    className="flex cursor-pointer w-full items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
                 >
                     {otpLoading ?
                         (<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />) :

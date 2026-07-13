@@ -123,10 +123,10 @@ export const deleteAccount = async () => {
         const result = await CallAPI("/auth/delete","DELETE",{},token);
         return result;
     } catch (err) {
-        console.error("Delete Account Error:", err);
+        console.error("Account Delete Error:", err);
         return {
             success: false,
-            message: "Account Delete Issue"
+            message: "Account delete issue"
         };
     }
 };
@@ -143,3 +143,31 @@ export const Dashboard = async () => {
         };
     }
 }
+
+export const changeVisibility = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        const result = await CallAPI("/profile/visible","PATCH",{},token);
+        return result;
+    } catch (err) {
+        console.error("Visibility Error:", err);
+        return {
+            success: false,
+            message: "Visibility update issue"
+        };
+    }
+};
+
+export const deleteCard = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        const result = await CallAPI("/profile/delete","DELETE",{},token);
+        return result;
+    } catch (err) {
+        console.error("Card Delete Error:", err);
+        return {
+            success: false,
+            message: "Card delete issue"
+        };
+    }
+};

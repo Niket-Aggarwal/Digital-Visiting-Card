@@ -285,6 +285,15 @@ Deletes digital identity card.
 DELETE /profile/delete
 ```
 
+### Public Profile
+Returns public profile using unique slug.
+
+```
+POST /profile/show
+```
+
+## API created when Frontend is on Development
+
 ### Feedback
 This is to collect feedback anamynous
 
@@ -292,11 +301,11 @@ This is to collect feedback anamynous
 POST /feedback
 ```
 
-### Public Profile
-Returns public profile using unique slug.
+### Toogle for Home
+Is private or public
 
 ```
-POST /profile/show
+PATCH /profile/visible
 ```
 
 # ☁ Image Upload

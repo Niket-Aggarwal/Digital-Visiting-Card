@@ -18,7 +18,7 @@ const NotFound = () => {
                     Oops! The page you're looking for doesn't exist or may have been moved.
                 </p>
                 <Link to="/"
-                    className="mt-8 inline-flex items-center gap-3 rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(37,99,235,0.5)]"
+                    className="mt-8 inline-flex cursor-pointer items-center gap-3 rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(37,99,235,0.5)]"
                 >
                     <FaHome />
                     Back to Home
