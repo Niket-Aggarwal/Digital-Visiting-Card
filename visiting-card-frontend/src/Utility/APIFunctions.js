@@ -117,6 +117,20 @@ export const resetPassword = async (data) => {
     }
 };
 
+export const deleteAccount = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        const result = await CallAPI("/auth/delete","DELETE",{},token);
+        return result;
+    } catch (err) {
+        console.error("Delete Account Error:", err);
+        return {
+            success: false,
+            message: "Account Delete Issue"
+        };
+    }
+};
+
 export const Dashboard = async () => {
     try {
         const result = await CallAPI("/profile/main", "GET", {}, localStorage.getItem("token"))

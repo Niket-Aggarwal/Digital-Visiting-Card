@@ -1,21 +1,25 @@
-import React from 'react'
 import useAuth from "../Hooks/useAuth";
 import useCard from "../Hooks/useCard";
 
 const Dashboard = () => {
 
-  const {user,messuser,logout}=useAuth()
-  const {card,messcard}=useCard()
-  console.log(user)
-  console.log(card)
-  console.log(messcard)
-  console.log(messuser)
-  return (
-    <div>
-        <p className='bg-amber-500'>h</p>    
-        <button onClick={logout} className='bg-blue-50'>logout</button>  
-    </div>
-  )
-}
+    const { user, logout } = useAuth();
+    const { card } = useCard();
 
-export default Dashboard
+    return (
+        <div>
+
+            <h1 className="text-3xl font-bold text-white">
+                Dashboard
+            </h1>
+
+            <p className="mt-2 text-gray-400">
+                Welcome back, {user?.name}
+            </p>
+            <button onClick={logout} className="bg-amber-500">Hel</button>
+
+        </div>
+    );
+};
+
+export default Dashboard;

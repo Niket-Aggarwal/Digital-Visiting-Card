@@ -28,7 +28,7 @@ const Google = () => {
               }
               await initialize();
               await initializecard();
-              navigate("/dashboard");
+              navigate("/profile/dashboard");
             } catch (err) {
               console.error("ContextAPI Error:", err);
               setError("Google Client Error");

@@ -69,7 +69,7 @@ const Login = () => {
             }
             await initialize();
             await initializecard();
-            navigate("/dashboard");
+            navigate("/profile/dashboard");
         } catch (err) {
             console.error("Login Error:", err);
             setError("Login issue. Try again!");

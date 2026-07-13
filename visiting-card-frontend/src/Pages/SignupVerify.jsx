@@ -52,7 +52,7 @@ const Signupverify = () => {
             }
             await initialize();
             await initializecard();
-            navigate("/dashboard");
+            navigate("/profile/dashboard");
         } catch (err) {
             setError("OTP verification issue. Try again!");
         } finally {
