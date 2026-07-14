@@ -1,17 +1,16 @@
-export const CallAPI = async (path,method,data = {},token = null) => {
+export const CallAPI = async (path, method, data = {}, token = null) => {
     try {
-        const headers = {
-            "Content-Type": "application/json",
-        };
+        const isFormData = data instanceof FormData;
+        const headers = {};
+        if (!isFormData) {
+            headers["Content-Type"] = "application/json";
+        }
         if (token) {
             headers.Authorization = `Bearer ${token}`;
         }
-        const options = {
-            method,
-            headers,
-        };
+        const options = { method, headers };
         if (method !== "GET") {
-            options.body = JSON.stringify(data);
+            options.body = isFormData ? data : JSON.stringify(data);
         }
         const res = await fetch(`/api${path}`, options);
         const result = await res.json();
@@ -20,7 +19,7 @@ export const CallAPI = async (path,method,data = {},token = null) => {
         console.error("API Calling Error:", err);
         return {
             success: false,
-            message: "Issue in connecting to Server",
+            message: "Issue in connecting to Server"
         };
     }
 };

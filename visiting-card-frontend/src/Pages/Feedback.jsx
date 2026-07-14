@@ -1,16 +1,17 @@
-const Show = () => {
+import React from 'react'
 
+const Feedback = () => {
     return (
-        <div>
+        <>
             <h1 className="text-3xl font-bold text-white">
-                Your Card
+                Your feedback
             </h1>
-
             <p className="mt-2 text-gray-400">
                 Preview your NexLink digital card.
             </p>
-        </div>
-    );
-};
 
-export default Show;
+        </>
+    )
+}
+
+export default Feedback

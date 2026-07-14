@@ -228,36 +228,11 @@ The Dashboard page to show either to Create or not as one id support one card on
 GET /profile/main
 ```
 
-### Create Profile
+### Manage Profile
 First Take: Basic Details
 
 ```
-POST /profile/create/basic
-```
-
-Second Take: Phno and upload
-
-```
-PATCH /profile/second
-```
-
-Third Take: all social links
-
-```
-PATCH /profile/third
-```
-
-Final Take: layout and other details
-
-```
-PATCH /profile/final
-```
-
-### Update Profile
-First Take: Basic Details
-
-```
-PATCH /profile/update/basic
+POST /profile/first
 ```
 
 Second Take: Phno and upload

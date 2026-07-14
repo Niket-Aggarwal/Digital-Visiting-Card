@@ -120,7 +120,7 @@ export const resetPassword = async (data) => {
 export const deleteAccount = async () => {
     try {
         const token = localStorage.getItem("token");
-        const result = await CallAPI("/auth/delete","DELETE",{},token);
+        const result = await CallAPI("/auth/delete", "DELETE", {}, token);
         return result;
     } catch (err) {
         console.error("Account Delete Error:", err);
@@ -147,7 +147,7 @@ export const Dashboard = async () => {
 export const changeVisibility = async () => {
     try {
         const token = localStorage.getItem("token");
-        const result = await CallAPI("/profile/visible","PATCH",{},token);
+        const result = await CallAPI("/profile/visible", "PATCH", {}, token);
         return result;
     } catch (err) {
         console.error("Visibility Error:", err);
@@ -158,10 +158,38 @@ export const changeVisibility = async () => {
     }
 };
 
+export const createBasicDetails = async (data) => {
+    try {
+        const token = localStorage.getItem("token");
+        const result = await CallAPI("/profile/first", "POST", data, token);
+        return result;
+
+    } catch (err) {
+        console.error("Basic Details Error:", err);
+        return {
+            success: false,
+            message: "Unable to create basic details"
+        };
+    }
+};
+
+export const createUploads = async (data) => {
+    try {
+        const token = localStorage.getItem("token");
+        const result = await CallAPI("/profile/second", "PATCH", data, token);
+        return result;
+    } catch (err) {
+        return {
+            success: false,
+            message: "Upload Details Issue"
+        };
+    }
+};
+
 export const deleteCard = async () => {
     try {
         const token = localStorage.getItem("token");
-        const result = await CallAPI("/profile/delete","DELETE",{},token);
+        const result = await CallAPI("/profile/delete", "DELETE", {}, token);
         return result;
     } catch (err) {
         console.error("Card Delete Error:", err);

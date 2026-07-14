@@ -41,29 +41,33 @@ exports.Main = async (req, res) => {
 };
 
 
-exports.FirstTake = async (req, res) => {
+exports.First = async (req, res) => {
     try {
         const result = tokencheck(req.headers.authorization);
         if (!result.success) {
             return res.status(401).send(result);
         }
-        const { name, headline, bio, email, slug } = req.body
-        EmailCheck(email)
-        Namecheck(name)
-        let newslug, exist;
-        do {
-            newslug = slugCreate(slug)
-            exist = await cardModel.findOne({ slug: newslug });
-        } while (exist)
-        const Card = await cardModel.create({
-            authId: result.decoded.id,
-            name, bio, headline, email,
-            slug: newslug,
-        })
+        const { name, headline, bio, email, slug } = req.body;
+        EmailCheck(email);
+        Namecheck(name);
+        const exist = await cardModel.findOne({ authId: result.decoded.id });
+        const originalSlug = exist?.slug.split("-")[0];
+        let newslug, slugcheck;
+        if (slug !== originalSlug) {
+            do {
+                newslug = slugCreate(slug)
+                slugcheck = await cardModel.findOne({ slug: newslug });
+            } while (slugcheck)
+        }
+        const card = await cardModel.findOneAndUpdate(
+            { authId: result.decoded.id },
+            { name, bio, headline, email, slug: newslug },
+            { returnDocument: "after", upsert: true }
+        );
         return res.status(200).send({
             success: true,
             message: "Basic Created"
-        })
+        });
     } catch (err) {
         if (err.name === "ValidateError") {
             return res.status(400).send({
@@ -73,13 +77,13 @@ exports.FirstTake = async (req, res) => {
                 message: err.message
             });
         }
-        const result = tokenerr(err, "FirstTake Error:")
+        const result = tokenerr(err, "FirstTake Error:");
         return res.status(result.status).send({
             success: result.success,
             message: result.message
-        })
+        });
     }
-}
+};
 
 
 exports.Second = async (req, res) => {
@@ -89,17 +93,17 @@ exports.Second = async (req, res) => {
             return res.status(401).send(result);
         }
         const { phone, check } = req.body
+        const exist = await cardModel.findOne({ authId: result.decoded.id });
         let phno = null, image = null, id = null
         const img = req.file
         if (phone) {
             phnocheck(phone)
             phno = phone
         }
+        if (exist.imageId) {
+            await deleteImage(exist.imageId)
+        }
         if (img) {
-            const exist = await cardModel.findOne({ authId: result.decoded.id });
-            if (exist.imageId) {
-                await deleteImage(exist.imageId)
-            }
             const data = await uploadImage(img.buffer);
             image = data.secure_url
             id = data.public_id

@@ -1,16 +1,16 @@
-const Update = () => {
+const Layout = () => {
 
     return (
         <div>
             <h1 className="text-3xl font-bold text-white">
-                Update Card
+                Your Card
             </h1>
 
             <p className="mt-2 text-gray-400">
-                Update your digital identity.
+                Preview your NexLink digital card.
             </p>
         </div>
     );
 };
 
-export default Update;
+export default Layout;

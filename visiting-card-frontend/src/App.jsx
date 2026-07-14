@@ -12,9 +12,9 @@ import Signupverify from "./Pages/SignupVerify";
 
 import Profile from "./Pages/Profile";
 import Dashboard from "./Pages/Dashboard";
-import Create from "./Pages/Create";
-import Update from "./Pages/Update";
-import Show from "./Pages/Show";
+import Manage from "./Pages/Manage";
+import Layout from "./Pages/Layout";
+import Feedback from "./Pages/Feedback"
 
 import PrivacyPolicy from "./Components/Other/Privacy";
 import TermsAndConditions from "./Components/Other/Term";
@@ -40,9 +40,9 @@ function App() {
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}>
                     <Route index element={<Navigate to="dashboard" replace />} />
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="create" element={<Create />} />
-                    <Route path="update" element={<Update />} />
-                    <Route path="show" element={<Show />} />
+                    <Route path="manage" element={<Manage />} />
+                    <Route path="layout" element={<Layout />} />
+                    <Route path="feedback" element={<Feedback />} />
                 </Route>
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/term" element={<TermsAndConditions />} />

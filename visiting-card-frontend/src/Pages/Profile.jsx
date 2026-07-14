@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { FiGrid, FiPlus, FiEdit3, FiEye, FiX } from "react-icons/fi";
+import { FiGrid, FiLayout, FiEdit3, FiX, FiMessageSquare } from "react-icons/fi";
 import Navbar from "../Components/Other/Navbar";
 
 const Profile = () => {
@@ -11,10 +11,7 @@ const Profile = () => {
         <div className="min-h-screen text-white">
             <Navbar setMenuOpen={setMenuOpen} profile={true} />
             {menuOpen && (
-                <div
-                    onClick={() => setMenuOpen(false)}
-                    className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-                />
+                <div onClick={() => setMenuOpen(false)} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" />
             )}
             <aside
                 className={`fixed right-0 top-0 z-50 h-screen w-72 border-l border-blue-500/20 bg-slate-950 p-6 transition-transform duration-300 lg:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
@@ -42,18 +39,7 @@ const Profile = () => {
                         <FiGrid className="text-xl" />
                         Identity Center
                     </NavLink>
-                    <NavLink to="/profile/create" onClick={() => setMenuOpen(false)}
-                        className={({ isActive }) =>
-                            `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
-                                ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
-                                : "-translate-y-1 border-blue-500/20 bg-slate-900/80 text-gray-400 shadow-[0_6px_0_rgba(15,23,42,1)]"
-                            }`
-                        }
-                    >
-                        <FiPlus className="text-xl" />
-                        Digital Creation
-                    </NavLink>
-                    <NavLink to="/profile/update" onClick={() => setMenuOpen(false)}
+                    <NavLink to="/profile/manage" onClick={() => setMenuOpen(false)}
                         className={({ isActive }) =>
                             `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
                                 ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
@@ -62,9 +48,9 @@ const Profile = () => {
                         }
                     >
                         <FiEdit3 className="text-xl" />
-                        Refine Identity
+                        Manage Identity
                     </NavLink>
-                    <NavLink to="/profile/show" onClick={() => setMenuOpen(false)}
+                    <NavLink to="/profile/layout" onClick={() => setMenuOpen(false)}
                         className={({ isActive }) =>
                             `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
                                 ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
@@ -72,8 +58,19 @@ const Profile = () => {
                             }`
                         }
                     >
-                        <FiEye className="text-xl" />
-                        Live Preview
+                        <FiLayout className="text-xl" />
+                        Layout Options
+                    </NavLink>
+                    <NavLink to="/profile/feedback" onClick={() => setMenuOpen(false)}
+                        className={({ isActive }) =>
+                            `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
+                                ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
+                                : "-translate-y-1 border-blue-500/20 bg-slate-900/80 text-gray-400 shadow-[0_6px_0_rgba(15,23,42,1)]"
+                            }`
+                        }
+                    >
+                        <FiMessageSquare className="text-xl" />
+                        Feedback
                     </NavLink>
                 </div>
             </aside>
@@ -91,18 +88,7 @@ const Profile = () => {
                             <FiGrid className="text-xl" />
                             Identity Center
                         </NavLink>
-                        <NavLink to="/profile/create"
-                            className={({ isActive }) =>
-                                `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
-                                    ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
-                                    : "-translate-y-1 border-blue-500/20 bg-slate-900/80 text-gray-400 shadow-[0_6px_0_rgba(15,23,42,1)] hover:text-white"
-                                }`
-                            }
-                        >
-                            <FiPlus className="text-xl" />
-                            Digital Creation
-                        </NavLink>
-                        <NavLink to="/profile/update"
+                        <NavLink to="/profile/manage"
                             className={({ isActive }) =>
                                 `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
                                     ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
@@ -111,9 +97,9 @@ const Profile = () => {
                             }
                         >
                             <FiEdit3 className="text-xl" />
-                            Refine Identity
+                            Manage Identity
                         </NavLink>
-                        <NavLink to="/profile/show"
+                        <NavLink to="/profile/layout"
                             className={({ isActive }) =>
                                 `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
                                     ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
@@ -121,8 +107,19 @@ const Profile = () => {
                                 }`
                             }
                         >
-                            <FiEye className="text-xl" />
-                            Live Preview
+                            <FiLayout className="text-xl" />
+                            Layout Options
+                        </NavLink>
+                        <NavLink to="/profile/feedback"
+                            className={({ isActive }) =>
+                                `flex items-center gap-4 rounded-xl border px-5 py-4 font-medium transition-all duration-200 ${isActive
+                                    ? "translate-y-1 border-cyan-400/50 bg-cyan-500/10 text-cyan-400 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
+                                    : "-translate-y-1 border-blue-500/20 bg-slate-900/80 text-gray-400 shadow-[0_6px_0_rgba(15,23,42,1)] hover:text-white"
+                                }`
+                            }
+                        >
+                            <FiMessageSquare className="text-xl" />
+                            Feedback
                         </NavLink>
                     </div>
                 </aside>
