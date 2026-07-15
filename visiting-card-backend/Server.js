@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express")
 const cors = require("cors");
 const dbCollections = require("./Config/DatabaseConnection")
+const { tokencheck, tokenerr } = require("./Utility/Customwork")
 const auth = require("./Routes/Auth")
 const dash = require("./Routes/Dashboard")
 const uploadError = require("./Middleware/Error");
@@ -28,14 +29,35 @@ app.get("/", (req, res) => {
 
 
 app.post("/feedback", async (req, res) => {
-  const { feedback } = req.body
-  await reviewModel.create({ feedback })
-  res.status(200).send({
-    Title: "NexLink",
-    Tagline: "Next Generation Digital Identity",
-    message: "Feedback added"
-  });
-})
+  try {
+    const result = tokencheck(req.headers.authorization);
+    if (!result.success) {
+      return res.status(401).send(result);
+    }
+    const { star, feedback } = req.body;
+    if (!star || !feedback?.trim()) {
+      return res.status(400).send({
+        success: false,
+        message: "Rating and feedback are required"
+      });
+    }
+    await reviewModel.findOneAndUpdate(
+      { authId: result.decoded.id },
+      { star, feedback },
+      { returnDocument: "after", upsert: true }
+    );
+    return res.status(200).send({
+      success: true,
+      message: "Feedback saved successfully"
+    });
+  } catch (err) {
+    const result = tokenerr(err, "Feedback Error:");
+    return res.status(result.status).send({
+      success: result.success,
+      message: result.message
+    });
+  }
+});
 
 
 app.use("/auth", auth)

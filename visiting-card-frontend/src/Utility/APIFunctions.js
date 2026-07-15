@@ -199,3 +199,17 @@ export const deleteCard = async () => {
         };
     }
 };
+
+export const createFeedback = async (data) => {
+    try {
+        const token = localStorage.getItem("token");
+        const result = await CallAPI("/feedback", "POST", data, token);
+        return result;
+    } catch (err) {
+        console.error("Feedback Error:", err);
+        return {
+            success: false,
+            message: "Feedback issue"
+        };
+    }
+};
