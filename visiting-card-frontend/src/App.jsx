@@ -16,6 +16,7 @@ import Manage from "./Pages/Manage";
 import Layout from "./Pages/Layout";
 import Feedback from "./Pages/Feedback"
 
+import PublicProfile from "./Pages/PublicProfile"
 import PrivacyPolicy from "./Components/Other/Privacy";
 import TermsAndConditions from "./Components/Other/Term";
 import NotFound from "./Pages/NotFound";
@@ -44,6 +45,7 @@ function App() {
                     <Route path="layout" element={<Layout />} />
                     <Route path="feedback" element={<Feedback />} />
                 </Route>
+                <Route path="/:slug" element={<PublicProfile/>}/>
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/term" element={<TermsAndConditions />} />
                 <Route path="*" element={<NotFound />} />

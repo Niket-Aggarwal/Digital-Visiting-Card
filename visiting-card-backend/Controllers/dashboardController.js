@@ -20,7 +20,7 @@ exports.Main = async (req, res) => {
         if (!result.success) {
             return res.status(401).send(result);
         }
-        const exist = await cardModel.findOne({ authId: result.decoded.id }).select("-_id -__v -createdAt -updatedAt -authId");
+        const exist = await cardModel.findOne({ authId: result.decoded.id }).select("-_id -__v -createdAt -updatedAt -authId -imageId");
         if (!exist) {
             return res.status(200).send({
                 success: false,
@@ -161,6 +161,7 @@ exports.Third = async (req, res) => {
                 return res.status(400).send({
                     success: false,
                     under: true,
+                    type: Others[i].platform,
                     message: `${Others[i].platform} is already a default social platform.`
                 });
             }
@@ -224,75 +225,29 @@ exports.Final = async (req, res) => {
 }
 
 
-exports.Firstupdate = async (req, res) => {
-    try {
-        const result = tokencheck(req.headers.authorization);
-        if (!result.success) {
-            return res.status(401).send(result);
-        }
-        const { name, headline, bio, email, slug } = req.body
-        const exist = await cardModel.findOne({ authId: result.decoded.id });
-        const originalSlug = exist.slug.split("-")[0];
-        let newslug = exist.slug, slugcheck;
-        const update = {}
-        if (email !== exist.email) {
-            EmailCheck(email)
-            update.email = email
-        }
-        if (name !== exist.name) {
-            Namecheck(name)
-            update.name = name
-        }
-        if (bio !== exist.bio) {
-            update.bio = bio
-        }
-        if (headline !== exist.headline) {
-            update.headline = headline
-        }
-        if (slug !== originalSlug) {
-            do {
-                newslug = slugCreate(slug)
-                slugcheck = await cardModel.findOne({ slug: newslug });
-            } while (slugcheck)
-            update.slug = newslug
-        }
-        await cardModel.findOneAndUpdate({ authId: result.decoded.id }, update);
-        return res.status(200).send({
-            success: true,
-            message: "Basic Updated"
-        })
-    } catch (err) {
-        if (err.name === "ValidateError") {
-            return res.status(400).send({
-                success: false,
-                under: true,
-                type: err.type,
-                message: err.message
-            });
-        }
-        const result = tokenerr(err, "FirstUpdate Error:")
-        return res.status(result.status).send({
-            success: result.success,
-            message: result.message
-        })
-    }
-}
-
-
 exports.Getprofile = async (req, res) => {
     try {
-        const { slug } = req.body
-        const exist = await cardModel.findOne({ slug: slug }).select("-_id -__v -createdAt -updatedAt -authId");
+        const { slug } = req.body;
+        const exist = await cardModel.findOne({ slug }).select("-_id -authId -__v -createdAt -updatedAt -imageId");
         if (!exist) {
-            return res.status(404).json({
-                success: false,
-                message: "Sorry! No profile Found"
-            });
-        }
-        if (!exist.isPublic) {
             return res.status(404).send({
                 success: false,
-                message: "Sorry! this profile is private"
+                message: "Sorry! No profile found."
+            });
+        }
+        try {
+            const result = tokencheck(req.headers.authorization);
+            if (result.success && String(result.decoded.id) === String(exist.authId)) {
+                return res.status(200).send({
+                    success: true,
+                    Card: exist
+                });
+            }
+        } catch (err) { }
+        if (!exist.isPublic) {
+            return res.status(403).send({
+                success: false,
+                message: "Sorry! This profile is private."
             });
         }
         return res.status(200).send({
@@ -300,7 +255,7 @@ exports.Getprofile = async (req, res) => {
             Card: exist
         });
     } catch (err) {
-        console.error('GetProfile:', err)
+        console.error("GetProfile:", err);
         return res.status(500).send({
             success: false,
             message: "Something went wrong."

@@ -5,6 +5,7 @@ import Uploads from "../Components/Manage/Uploads";
 import Social from "../Components/Manage/Social";
 import Finish from "../Components/Manage/Finish";
 import useCard from "../Hooks/useCard";
+import { Samepagetop } from "../Utility/Functions";
 
 const Manage = () => {
 
@@ -33,11 +34,13 @@ const Manage = () => {
     const next = async () => {
         await initializecard();
         setStep((prev) => Math.min(prev + 1, 4));
+        Samepagetop();
     };
 
     const back = async () => {
         await initializecard();
         setStep((prev) => Math.max(prev - 1, 1));
+        Samepagetop();
     };
 
     return (

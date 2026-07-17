@@ -53,7 +53,6 @@ exports.GoogleLogin = async (req, res) => {
         return res.status(200).send({
             success: true,
             user: {
-                id: exist._id,
                 name: exist.name,
                 email: exist.email,
                 picture: exist.picture
@@ -86,7 +85,6 @@ exports.ActiveSession = async (req, res) => {
         return res.status(200).send({
             success: true,
             user: {
-                id: exist._id,
                 name: exist.name,
                 email: exist.email,
                 picture: exist.picture
@@ -166,7 +164,6 @@ exports.Verify = async (req, res) => {
         return res.status(200).send({
             success: true,
             user: {
-                id: exist._id,
                 name: exist.name,
                 email: exist.email,
                 picture: exist.picture
@@ -215,7 +212,6 @@ exports.Register = async (req, res) => {
         return res.status(200).send({
             success: true,
             user: {
-                id: add._id,
                 name: add.name,
                 email: add.email,
                 picture: add.picture

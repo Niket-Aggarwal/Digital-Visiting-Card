@@ -186,6 +186,33 @@ export const createUploads = async (data) => {
     }
 };
 
+export const createSocial = async (data) => {
+    try {
+        const result = await CallAPI("/profile/third", "PATCH", data, localStorage.getItem("token"));
+        return result;
+    } catch (err) {
+        console.error("createSocial Error:", err);
+        return {
+            success: false,
+            message: "Unable to save social accounts"
+        };
+    }
+};
+
+export const createFinish = async (data) => {
+    try {
+        const token = localStorage.getItem("token")
+        const result = await CallAPI("/profile/final", "PATCH", data, token);
+        return result;
+    } catch (err) {
+        console.error("createFinish Error:", err);
+        return {
+            success: false,
+            message: "createFinish issue"
+        };
+    }
+};
+
 export const deleteCard = async () => {
     try {
         const token = localStorage.getItem("token");
@@ -196,6 +223,20 @@ export const deleteCard = async () => {
         return {
             success: false,
             message: "Card delete issue"
+        };
+    }
+};
+
+export const publicProfile = async (data) => {
+    try {
+        const token = localStorage.getItem("token") || null
+        const result = await CallAPI("/profile/show", "POST", data, token);
+        return result;
+    } catch (err) {
+        console.error("publicProfile Error:", err);
+        return {
+            success: false,
+            message: "publicProfile issue"
         };
     }
 };
