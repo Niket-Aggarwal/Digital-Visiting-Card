@@ -24,7 +24,7 @@ const cardSchema = new mongoose.Schema(
             { _id: false, platform: String, link: String }
         ],
         theme: { type: String, default: "dark" },
-        layout: { type: String, default: "modern" },
+        layout: { type: String, default: "minimal" },
         slug: { type: String, unique: true, required: true },
         isPublic: { type: Boolean, default: true },
         userType: { type: String, default: "free" }

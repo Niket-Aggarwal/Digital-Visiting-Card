@@ -228,11 +228,17 @@ exports.Final = async (req, res) => {
 exports.Getprofile = async (req, res) => {
     try {
         const { slug } = req.body;
-        const exist = await cardModel.findOne({ slug }).select("-_id -authId -__v -createdAt -updatedAt -imageId");
+        const exist = await cardModel.findOne({ slug }).select("-_id -__v -createdAt -updatedAt -imageId");
         if (!exist) {
             return res.status(404).send({
                 success: false,
                 message: "Sorry! No profile found."
+            });
+        }
+        if (exist.isPublic) {
+            return res.status(200).send({
+                success: true,
+                Card: exist
             });
         }
         try {
@@ -244,15 +250,9 @@ exports.Getprofile = async (req, res) => {
                 });
             }
         } catch (err) { }
-        if (!exist.isPublic) {
-            return res.status(403).send({
-                success: false,
-                message: "Sorry! This profile is private."
-            });
-        }
-        return res.status(200).send({
-            success: true,
-            Card: exist
+        return res.status(403).send({
+            success: false,
+            message: "Sorry! This profile is private."
         });
     } catch (err) {
         console.error("GetProfile:", err);
