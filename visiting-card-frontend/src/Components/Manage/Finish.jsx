@@ -44,7 +44,7 @@ const Finish = ({ back, card }) => {
         <div className="w-full">
             <div>
                 <h2 className="text-xl font-bold text-white sm:text-2xl">
-                    Finish Identity
+                    Select Layout & Visibility
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-gray-400">
                     Configure the final appearance of your NexLink profile.
@@ -118,7 +118,7 @@ const Finish = ({ back, card }) => {
                     Back
                 </button>
                 <button type="button" onClick={handleFinish} disabled={loading} className="cursor-pointer rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 px-8 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60">
-                    {loading ? "Finishing..." : "Finish Identity"}
+                    {loading ? "Creating..." : "Create"}
                 </button>
             </div>
         </div>

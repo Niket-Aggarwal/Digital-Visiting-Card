@@ -201,11 +201,11 @@ const Basic = ({ next, card }) => {
             )}
             <div className="mt-8 flex justify-end">
                 <button type="submit" disabled={loading}
-                    className="flex min-w-32 cursor-pointer items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 px-8 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(34,211,238,0.25)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+                    className="flex w-full cursor-pointer items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 px-8 py-3 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(34,211,238,0.25)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100 sm:w-auto sm:min-w-32"
                 >
                     {
                         loading ?
-                            (<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />) :
+                            ("Saving...") :
                             ("Next")
                     }
                 </button>

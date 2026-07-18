@@ -1,7 +1,7 @@
 
 const Progress = ({ step }) => {
 
-    const steps = ["Basic Details", "Uploads", "Social Accounts", "Layout"];
+    const steps = ["Basic Details", "Image & Contact", "Social Accounts", "Layout"];
 
     return (
         <div className="hidden w-full items-center md:flex">

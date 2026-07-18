@@ -91,7 +91,7 @@ const Uploads = ({ next, back, card }) => {
         <form onSubmit={handleSubmit} noValidate className="w-full">
             <div>
                 <h2 className="text-xl font-bold text-white sm:text-2xl">
-                    Uploads
+                    Image & Contact
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-gray-400">
                     Add your contact number and choose a profile image for your NexLink identity.

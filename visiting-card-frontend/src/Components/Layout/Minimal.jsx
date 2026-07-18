@@ -126,7 +126,7 @@ const Minimal = ({ card }) => {
                 {hasBio && (
                     <section className="mt-4 text-left">
                         <h2 className={`text-[11px] font-medium uppercase tracking-[0.16em] ${t.section}`}>
-                            About
+                            About Me
                         </h2>
                         <p className={`mt-2 text-[15px] sm:text-lg leading-relaxed wrap-break-word transition-all duration-300 ${t.bio}`}>
                             {card.bio}
@@ -140,7 +140,7 @@ const Minimal = ({ card }) => {
                         </h2>
                         <div className="mt-2 flex flex-col gap-2">
                             {hasEmail && (
-                                <a href={card.email} className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg ${t.chip}`}>
+                                <a href={`mailto:${card.email}`} className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg ${t.chip}`}>
                                     <HiOutlineMail className="h-4 w-4 shrink-0 opacity-70" />
                                     <span className="break-all">
                                         {card.email}
@@ -148,7 +148,7 @@ const Minimal = ({ card }) => {
                                 </a>
                             )}
                             {hasPhone && (
-                                <a href={card.phno} className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg ${t.chip}`}>
+                                <a href={`tel:${card.phno}`} className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg ${t.chip}`}>
                                     <HiOutlinePhone className="h-4 w-4 shrink-0 opacity-70" />
                                     <span className="break-all">
                                         {card.phno}

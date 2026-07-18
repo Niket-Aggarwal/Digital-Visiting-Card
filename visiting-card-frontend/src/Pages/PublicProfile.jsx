@@ -73,14 +73,14 @@ const PublicProfile = () => {
         );
     }
 
-    switch ((card?.layout || "minimal").toLowerCase()) {
-        case "modern":
-            return <Modern card={card} />;
+    switch ((card?.layout || "modern").toLowerCase()) {
+        case "minimal":
+            return <Minimal card={card} />;
         case "bold":
             return <Bold card={card} />;
-        case "minimal":
+        case "modern":
         default:
-            return <Minimal card={card} />;
+            return <Modern card={card} />;
     }
 };
 
