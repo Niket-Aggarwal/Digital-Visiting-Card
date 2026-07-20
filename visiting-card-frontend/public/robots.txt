@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://nexlinkdigitalidentity.vercel.app/sitemap.xml
+Sitemap: https://mynexlink.vercel.app/sitemap.xml
