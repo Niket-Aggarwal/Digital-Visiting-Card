@@ -15,6 +15,9 @@ const Dashboard = () => {
                 <h1 className="text-2xl font-bold text-white sm:text-3xl">
                     Identity Center
                 </h1>
+                <p className="mt-2 text-sm sm:text-base text-gray-400">
+                    Manage your digital identity, customize your profile, and control how the world connects with you through NexLink.
+                </p>
             </div>
             <div className="grid grid-cols-1 gap-5 xl:grid-cols-2 xl:gap-6">
                 <ProfileSection />
