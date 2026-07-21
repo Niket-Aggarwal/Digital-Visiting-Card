@@ -1,4 +1,4 @@
-# 🚀 NexLink Backend 
+# 🚀 NexLink Backend  
 > Backend for **NexLink — Next Generation Digital Identity Platform**
 
 NexLink enables users to create a professional digital identity card that can be shared with a single public URL. It provides secure authentication, profile management, email verification, and Google Sign-In.
