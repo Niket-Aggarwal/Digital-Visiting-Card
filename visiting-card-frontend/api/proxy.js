@@ -1,3 +1,9 @@
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
+
 export default async function handler(req, res) {
     try {
         const backendURL = process.env.BACKEND_URL;
@@ -8,25 +14,27 @@ export default async function handler(req, res) {
             });
         }
         const path = req.url.replace(/^\/api/, "");
-        const headers = {
-            "Content-Type": "application/json",
-        };
+        const headers = {};
         if (req.headers.authorization) {
-            headers.Authorization = req.headers.authorization;
+            headers.authorization = req.headers.authorization;
         }
-        const options = {
+        if (req.headers["content-type"]) {
+            headers["content-type"] = req.headers["content-type"];
+        }
+        const response = await fetch(`${backendURL}${path}`, {
             method: req.method,
             headers,
-        };
-        if (req.method !== "GET" && req.method !== "HEAD") {
-            options.body = JSON.stringify(req.body);
+            body:
+                req.method === "GET" || req.method === "HEAD"? undefined: req,duplex: "half"
+        });
+        const contentType = response.headers.get("content-type") || "";
+        res.status(response.status);
+        if (contentType.includes("application/json")) {
+            const data = await response.json();
+            return res.json(data);
         }
-        const response = await fetch(
-            `${backendURL}${path}`,
-            options
-        );
-        const data = await response.json();
-        return res.status(response.status).json(data);
+        const text = await response.text();
+        return res.send(text);
     } catch (err) {
         console.error("Proxy Error:", err);
         return res.status(500).json({

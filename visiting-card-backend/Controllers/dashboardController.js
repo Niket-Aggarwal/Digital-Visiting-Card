@@ -88,10 +88,6 @@ exports.First = async (req, res) => {
 
 exports.Second = async (req, res) => {
     try {
-        console.log("SECOND ROUTE HIT");
-        console.log("Content-Type:", req.headers["content-type"]);
-        console.log("Body:", req.body);
-        console.log("File:", req.file);
         const result = tokencheck(req.headers.authorization);
         if (!result.success) {
             return res.status(401).send(result);
