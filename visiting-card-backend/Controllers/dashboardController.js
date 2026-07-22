@@ -92,7 +92,7 @@ exports.Second = async (req, res) => {
         if (!result.success) {
             return res.status(401).send(result);
         }
-        const { phone, check } = req.body
+        const { phone, check, del } = req.body
         const exist = await cardModel.findOne({ authId: result.decoded.id });
         let phno = null, image = null, id = null
         const img = req.file
@@ -101,20 +101,14 @@ exports.Second = async (req, res) => {
             phno = phone
         }
         if (img) {
-            if (exist.imageId) {
-                await deleteImage(exist.imageId)
-            }
             const data = await uploadImage(img.buffer);
             image = data.secure_url
             id = data.public_id
         } else if (check) {
-            if (exist.imageId) {
-                await deleteImage(exist.imageId)
-            }
             const exist = await authModel.findById(result.decoded.id).select("-password");
             image = exist.picture
         }
-        if (!image){
+        if (del) {
             if (exist.imageId) {
                 await deleteImage(exist.imageId)
             }

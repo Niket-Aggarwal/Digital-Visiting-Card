@@ -7,6 +7,7 @@ import { createUploads } from "../../Utility/APIFunctions";
 const Uploads = ({ next, back, card }) => {
 
     const { user } = useAuth();
+    const [del, setdel] = useState(false)
     const [phone, setPhone] = useState("");
     const [image, setImage] = useState(null);
     const [useAuthImage, setUseAuthImage] = useState(false);
@@ -65,10 +66,13 @@ const Uploads = ({ next, back, card }) => {
             }
             if (image) {
                 formData.append("image", image);
+                setdel(true)
             }
             if (useAuthImage) {
                 formData.append("check", true);
+                setdel(true)
             }
+            formData.append("del",del)
             const result = await createUploads(formData);
             if (!result.success) {
                 const type = String(result.type || "").toLowerCase();
