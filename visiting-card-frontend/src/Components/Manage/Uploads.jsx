@@ -69,6 +69,9 @@ const Uploads = ({ next, back, card }) => {
             if (useAuthImage) {
                 formData.append("check", true);
             }
+            for (let pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+}
             const result = await createUploads(formData);
             if (!result.success) {
                 const type = String(result.type || "").toLowerCase();
