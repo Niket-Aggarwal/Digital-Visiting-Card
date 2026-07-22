@@ -100,16 +100,24 @@ exports.Second = async (req, res) => {
             phnocheck(phone)
             phno = phone
         }
-        if (exist.imageId) {
-            await deleteImage(exist.imageId)
-        }
         if (img) {
+            if (exist.imageId) {
+                await deleteImage(exist.imageId)
+            }
             const data = await uploadImage(img.buffer);
             image = data.secure_url
             id = data.public_id
         } else if (check) {
+            if (exist.imageId) {
+                await deleteImage(exist.imageId)
+            }
             const exist = await authModel.findById(result.decoded.id).select("-password");
             image = exist.picture
+        }
+        if (!image){
+            if (exist.imageId) {
+                await deleteImage(exist.imageId)
+            }
         }
         await cardModel.findOneAndUpdate({ authId: result.decoded.id },
             {
