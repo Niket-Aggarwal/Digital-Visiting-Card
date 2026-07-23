@@ -82,9 +82,9 @@ const IdentitySection = () => {
                                     Identity Url
                                 </p>
                             </div>
-                            <a href={`https://mynexlink.vercel.app/${card.slug}`} target="_blank" rel="noopener noreferrer"
+                            <a href={`https://mynexlink.vercel.app/p/${card.slug}`} target="_blank" rel="noopener noreferrer"
                                 className="mt-3 block wrap-break-word font-medium text-cyan-400 transition hover:text-cyan-300 hover:underline">
-                                    https://mynexlink.vercel.app/{card.slug}
+                                https://mynexlink.vercel.app/p/{card.slug}
                             </a>
                             <p className="mt-2 text-sm text-gray-500">
                                 This is your unique NexLink identity address.

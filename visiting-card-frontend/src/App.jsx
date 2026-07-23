@@ -45,7 +45,7 @@ function App() {
                     <Route path="layout" element={<Layout />} />
                     <Route path="feedback" element={<Feedback />} />
                 </Route>
-                <Route path="/:slug" element={<PublicProfile/>}/>
+                <Route path="/p/:slug" element={<PublicProfile />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/term" element={<TermsAndConditions />} />
                 <Route path="*" element={<NotFound />} />

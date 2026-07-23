@@ -72,7 +72,7 @@ const Feedback = () => {
                     </p>
                     <div className="mt-4 flex items-center gap-2 sm:gap-3">
                         {[1, 2, 3, 4, 5].map((star) => (
-                            <button key={star} type="button" onClick={() => { setRating(star); setError(""); }}
+                            <button key={star} type="button" onClick={() => { setRating(star); setError(""); setMessage("") }}
                                 className={`cursor-pointer text-3xl transition duration-200 hover:scale-110 sm:text-4xl ${star <= rating ? "text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.35)]" : "text-yellow-400/60"}`}
                             >
                                 {star <= rating ? (<FaStar />) : (<FiStar />)}
@@ -89,7 +89,7 @@ const Feedback = () => {
                     <label htmlFor="description" className="mb-2 block text-sm font-medium text-gray-300">
                         Description
                     </label>
-                    <textarea id="description" rows="6" value={description} onChange={(e) => { setDescription(e.target.value); setError(""); }}
+                    <textarea id="description" rows="6" value={description} onChange={(e) => { setDescription(e.target.value); setError(""); setMessage("") }}
                         placeholder="Share your thoughts, suggestions or experience..."
                         className="w-full resize-none rounded-xl border border-blue-500/20 bg-slate-950/50 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.10)]"
                     />

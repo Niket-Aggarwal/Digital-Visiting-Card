@@ -7,7 +7,6 @@ import { createUploads } from "../../Utility/APIFunctions";
 const Uploads = ({ next, back, card }) => {
 
     const { user } = useAuth();
-    const [del, setdel] = useState(false)
     const [phone, setPhone] = useState("");
     const [image, setImage] = useState(null);
     const [useAuthImage, setUseAuthImage] = useState(false);
@@ -19,7 +18,20 @@ const Uploads = ({ next, back, card }) => {
 
     useEffect(() => {
         setPhone(card?.phno || "");
-        setPreview(card?.image || ProfileIcon);
+        const imageUrl = card?.image || "";
+        if (imageUrl.includes("googleusercontent.com")) {
+            setUseAuthImage(true);
+            setImage("Google");
+            setPreview(imageUrl);
+        } else if (imageUrl.includes("res.cloudinary.com")) {
+            setUseAuthImage(false);
+            setImage("same");
+            setPreview(imageUrl);
+        } else {
+            setUseAuthImage(false);
+            setImage(null);
+            setPreview(ProfileIcon);
+        }
     }, [card]);
 
     useEffect(() => {
@@ -44,12 +56,12 @@ const Uploads = ({ next, back, card }) => {
         setUseAuthImage(checked);
         setError("");
         if (checked) {
-            setImage(null);
             if (fileRef.current) {
                 fileRef.current.value = "";
             }
             setPreview(user?.picture || ProfileIcon);
         } else {
+            setImage(null)
             setPreview(ProfileIcon);
         }
     };
@@ -66,13 +78,10 @@ const Uploads = ({ next, back, card }) => {
             }
             if (image) {
                 formData.append("image", image);
-                setdel(true)
             }
             if (useAuthImage) {
                 formData.append("check", true);
-                setdel(true)
             }
-            formData.append("del",del)
             const result = await createUploads(formData);
             if (!result.success) {
                 const type = String(result.type || "").toLowerCase();

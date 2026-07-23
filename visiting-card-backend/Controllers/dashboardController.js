@@ -92,29 +92,35 @@ exports.Second = async (req, res) => {
         if (!result.success) {
             return res.status(401).send(result);
         }
-        const { phone, check } = req.body
+        const { image, phone, check } = req.body
         const exist = await cardModel.findOne({ authId: result.decoded.id });
-        let phno = null, image = null, id = null
+        let phno = null, pic = null, id = exist?.imageId || null, auth = false
         const img = req.file
-        if(exist.imageId){
-            await deleteImage(exist.imageId)
+        if (image === "Google") {
+            auth = true
+        } else if (image === "same") {
+            pic = exist.image
+            id = exist.imageId
         }
         if (phone) {
             phnocheck(phone)
             phno = phone
         }
         if (img) {
+            if (exist.imageId) {
+                await deleteImage(exist.imageId)
+            }
             const data = await uploadImage(img.buffer);
-            image = data.secure_url
+            pic = data.secure_url
             id = data.public_id
-        } else if (check) {
+        } else if (check || auth) {
             const exist = await authModel.findById(result.decoded.id).select("-password");
-            image = exist.picture
+            pic = exist.picture
         }
         await cardModel.findOneAndUpdate({ authId: result.decoded.id },
             {
                 phno,
-                image,
+                image: pic,
                 imageId: id
             }
         )

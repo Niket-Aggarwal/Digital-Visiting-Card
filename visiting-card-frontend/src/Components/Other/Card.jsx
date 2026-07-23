@@ -16,16 +16,16 @@ const ProfileCard = (param) => {
             <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white/4 p-7 backdrop-blur-3xl shadow-[0_20px_60px_rgba(37,99,235,0.15)] transition-all duration-500 hover:-translate-y-2 hover:border-blue-400/40 hover:shadow-[0_20px_70px_rgba(37,99,235,0.30)]">
                 <div className="pointer-events-none absolute -left-32 top-0 h-full w-24 rotate-12 bg-white/10 blur-2xl transition-all duration-1000 group-hover:left-[120%]"></div>
                 <div className="flex flex-col items-center">
-                    {isImage ? 
+                    {isImage ?
                         (<div className="rounded-full bg-linear-to-r from-blue-500 to-cyan-400 p-1 shadow-[0_0_35px_rgba(59,130,246,.45)]">
-                            <img src={img} alt="Avatar" className="h-28 w-28 rounded-full object-cover sm:h-32 sm:w-32"/>
-                        </div>) : 
+                            <img src={img} alt="Avatar" className="h-28 w-28 rounded-full object-cover sm:h-32 sm:w-32" />
+                        </div>) :
                         (<div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full border border-cyan-500/20 bg-cyan-500/10 shadow-[0_0_60px_rgba(34,211,238,0.25)] backdrop-blur-xl">
                             {img && (
                                 React.createElement(img, {
-                                    className:"text-7xl text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.7)] transition duration-300 hover:scale-110",
-                                    })
-                                )}
+                                    className: "text-7xl text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.7)] transition duration-300 hover:scale-110",
+                                })
+                            )}
                         </div>)
                     }
                     <div className="mt-5 flex items-center gap-2">

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 
 const Getstart = () => {
-    
+
     return (
         <>
             <div className="relative overflow-hidden rounded-4xl border border-blue-500/20 bg-white/4 p-10 text-center backdrop-blur-3xl shadow-[0_20px_60px_rgba(37,99,235,0.15)]">

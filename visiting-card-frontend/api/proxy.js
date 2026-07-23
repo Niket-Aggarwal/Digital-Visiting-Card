@@ -25,7 +25,7 @@ export default async function handler(req, res) {
             method: req.method,
             headers,
             body:
-                req.method === "GET" || req.method === "HEAD"? undefined: req,duplex: "half"
+                req.method === "GET" || req.method === "HEAD" ? undefined : req, duplex: "half"
         });
         const contentType = response.headers.get("content-type") || "";
         res.status(response.status);

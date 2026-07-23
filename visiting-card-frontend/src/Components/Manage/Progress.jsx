@@ -1,4 +1,3 @@
-
 const Progress = ({ step }) => {
 
     const steps = ["Basic Details", "Image & Contact", "Social Accounts", "Layout"];

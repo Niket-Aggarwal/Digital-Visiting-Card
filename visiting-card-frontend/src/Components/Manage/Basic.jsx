@@ -167,7 +167,7 @@ const Basic = ({ next, card }) => {
                         <input id="slug" type="text" name="slug" value={data.slug} onChange={handleChange} placeholder="your-name" className={inputStyle("slug")} />
                     </div>
                     <p className="mt-2 wrap-break-word text-xs text-gray-500">
-                        mynexlink.vercel.app/{data.slug || "your-name"}
+                        mynexlink.vercel.app/p/{data.slug || "your-name"}
                     </p>
                     {fieldError.slug && (
                         <p className="mt-2 text-sm text-red-400">
